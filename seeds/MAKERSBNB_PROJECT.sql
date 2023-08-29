@@ -1,9 +1,14 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP SEQUENCE IF EXISTS users_id_seq;
-DROP TABLE IF EXISTS bookings CASCADE;
-DROP SEQUENCE IF EXISTS bookings_id_seq;
+
 DROP TABLE IF EXISTS spaces CASCADE;
 DROP SEQUENCE IF EXISTS spaces_id_seq;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP SEQUENCE IF EXISTS bookings_id_seq;
+
+
+
+
 
 CREATE SEQUENCE IF NOT EXISTS users_id_seq;
 CREATE TABLE users (
@@ -16,11 +21,13 @@ CREATE TABLE users (
 
 CREATE SEQUENCE IF NOT EXISTS spaces_id_seq;
 CREATE TABLE spaces (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name VARCHAR(50) NOT NULL,
-    address VARCHAR(50) NOT NULL,
-    price VARCHAR(24) NOT NULL,
-    description VARCHAR(125) NOT NULL,
+
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) ,
+    address VARCHAR(50) ,
+    price FLOAT,
+    description VARCHAR(125),
+
     user_id INT,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -42,6 +49,7 @@ INSERT INTO users (name, email, password, phone_number) VALUES
 ('Muhammad Mehmood', 'muhammad@gmail.com', 'makers321', '09876543210'),
 ('Kumani Kidd', 'kumani@makers.com', 'coding45!', '01111111111'),
 ('Yasien Watkin', 'yasien@makers.com', 'binaryhustler1', '05556667777');
+
 
 INSERT INTO spaces (name, address, price, description, user_id) values ('Lind', 'Suite 17', 4.53, 'value-added', 1);
 INSERT INTO spaces (name, address, price, description, user_id) values ('Therese', 'Apt 1847', 4.33, 'coherent', 2);
