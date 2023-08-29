@@ -13,7 +13,7 @@ class SpaceRepository():
                 row['user_id'])
     # finds a space
     def all(self):
-        rows = self._connection.execute('SELECT * FROM spaces')
+        rows = self._connection.execute('SELECT * FROM spaces ORDER BY id')
         spaces = []
         for row in rows:
             item = Space(row['id'],
@@ -25,12 +25,18 @@ class SpaceRepository():
             spaces.append(item)
         return spaces
     # returns all spaces
-    def create(self):
-        pass
-    # creates a space with name desc price etc
-    def delete(self):
-        pass
+    def delete(self, id):
+        self._connection.execute('DELETE FROM spaces WHERE id = %s', [id])
+        return None
     # deletes a space
-    def update(self):
-        pass
+    def create(self, space):
+        self._connection.execute('INSERT INTO spaces (name,address,price,description,user_id) VALUES(%s,%s,%s,%s,%s) ',[space.name,space.address,space.price,space.description,space.user_id])
+        return None
+    # creates a space with name desc price etc
+    def update(self,space):
+        self._connection.execute("UPDATE spaces SET name = %s, address = %s, price = %s, description = %s, user_id = %s  WHERE id = %s",
+                                [space.name, space.address, space.price, space.description, space.user_id, space.id])
+        return None
     # updates an already present space
+
+  
