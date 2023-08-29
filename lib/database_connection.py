@@ -1,4 +1,5 @@
-import os, psycopg
+import os
+import psycopg
 from flask import g
 from psycopg.rows import dict_row
 
@@ -24,8 +25,8 @@ class DatabaseConnection:
                 f"postgresql://localhost/{self._database_name()}",
                 row_factory=dict_row)
         except psycopg.OperationalError:
-            raise Exception(f"Couldn't connect to the database {self._database_name()}! " \
-                    f"Did you create it using `createdb {self._database_name()}`?")
+            raise Exception(f"Couldn't connect to the database {self._database_name()}! "
+                            f"Did you create it using `createdb {self._database_name()}`?")
 
     # This method seeds the database with the given SQL file.
     # We use it to set up our database ready for our tests or application.
@@ -70,6 +71,8 @@ class DatabaseConnection:
 
 # This function integrates with Flask to create one database connection that
 # Flask request can use. To see how to use it, look at example_routes.py
+
+
 def get_flask_database_connection(app):
     if not hasattr(g, 'flask_database_connection'):
         g.flask_database_connection = DatabaseConnection(

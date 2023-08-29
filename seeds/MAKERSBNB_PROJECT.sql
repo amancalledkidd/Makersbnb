@@ -1,9 +1,14 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP SEQUENCE IF EXISTS users_id_seq;
+
 DROP TABLE IF EXISTS spaces CASCADE;
 DROP SEQUENCE IF EXISTS spaces_id_seq;
 DROP TABLE IF EXISTS bookings CASCADE;
 DROP SEQUENCE IF EXISTS bookings_id_seq;
+
+
+
+
 
 CREATE SEQUENCE IF NOT EXISTS users_id_seq;
 CREATE TABLE users (
@@ -16,11 +21,13 @@ CREATE TABLE users (
 
 CREATE SEQUENCE IF NOT EXISTS spaces_id_seq;
 CREATE TABLE spaces (
+
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) ,
     address VARCHAR(50) ,
     price FLOAT,
     description VARCHAR(125),
+
     user_id INT,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
