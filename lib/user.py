@@ -1,8 +1,9 @@
 class User:
-    def __init__(self, id, name, email, phone_number) -> None:
+    def __init__(self, id, name, email, password, phone_number) -> None:
         self.id = id
         self.name = name
         self.email = email
+        self.password = password
         self.phone_number = phone_number
 
     def __eq__(self, other: object) -> bool:
