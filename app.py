@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository
 from lib.user import User
@@ -13,10 +13,18 @@ app = Flask(__name__)
 
 # GET /
 # Returns the homepage
+app.config['SECRET_KEY'] = 'your_secret_key'
 
 @app.route('/', methods=['GET'])
 def get_index():
-    return render_template('index.html')
+    user_id = session.get('user_id')
+    if user_id:
+        connection = get_flask_database_connection(app)
+        user_repository = UserRepository(connection)
+        user = user_repository.find(user_id)
+        return render_template('index.html', user=user)
+    else:
+        return render_template('index.html')
 
 @app.route('/signup')
 def signup():
@@ -28,7 +36,11 @@ def spaces():
 
 @app.route('/requests')
 def requests():
-    return render_template('requests.html')
+    user_id = session.get('user_id')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
+    return render_template('requests.html', user=user)
 
 @app.route('/spaces/new', methods=['POST'])
 def post_list():
@@ -82,21 +94,22 @@ def login():
 @app.route('/login', methods=['POST'])
 def post_login():
     connection = get_flask_database_connection(app)
-    email = request.form['email'] 
+    email = request.form['email']
     password = request.form['password']
-
     user_repository = UserRepository(connection)
-    try:
-        user = user_repository.find_by_email(email)
-        if user.password == password:
-            return render_template('index.html', user=user)
-        #if password matches log them in
-        else:
-            return render_template('login.html', error="Password incorrect")
-        #if user exists in database but passwords don't match then present error message
-    except:
-        return render_template('login.html', error="Email doesn't exist")
-        #if user doesn't exists in database present error message
+    user = user_repository.find_by_email(email)
+    
+    if user and user.password == password:
+        session['user_id'] = user.id
+        return redirect('/')
+    else:
+        return render_template('login.html', error="Invalid email or password")
+    
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect('/')
+
 
 
 
