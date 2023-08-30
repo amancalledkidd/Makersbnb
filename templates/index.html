@@ -7,36 +7,81 @@
             Head to https://github.com/makersacademy/web-applications-in-python/blob/main/pills/loading_css_or_static_files.md
             If you're wondering how the CSS file below is being loaded.
         -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;400;700&family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/style.css" >
+        
     </head>
     <body>
-        <h1>This is the homepage.</h1>
-        {%if user%}
-        <p>Logged in as {{user.name}}</p>
-        {%endif%}
-        <a href="{{url_for('signup')}}">Signup Page</a><br>
-        <a href="{{url_for('login')}}">Login Page</a>
-        <nav>
-            <a href=''><img src='' title="Logo"></a>
-            <a href=''><button>Log in</button></a>
-            <a href=''><button>Spaces</button></a>
-            <a href=''><button>Requests</button></a>
-        </nav>
-        <div class="cta-card">
-            <button>Sign Up</button>
-
-        </div>
         
-        {% for space in spaces %}
-        <div>
-            Address: {{space.address}}
-            Name: {{space.name}}
-            Price: {{space.price}}
-
-            <a href="/listing/{{space.id}}"><button> Listings</button></a>
+        
+        
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="https://d92mrp7hetgfk.cloudfront.net/images/sites/misc/makersacademylogo/original.png?1560210076" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                <i class="text-primary">Makers BNB</i>
+              </a>
+              <ul class="nav justify-content-end">
             
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url_for('login')}}"><img src=""></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Spaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Requests</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/signup"><strong>Sign Up</strong></a>
+                </li>
+                
+              </ul>
+            </div>
+            
+          </nav>
 
-        </div>
+        
+        
+          
+        <br>
+        <br>
+        <br>
+          <h1 class="text-center title-main">Makers BNB</h1>
+          <br>
+          
+          {%if user%}
+          <p>Logged in as {{user.name}}</p>
+          {%endif%}
+
+
+
+
+
+
+        <div class="d-inline-flex p-2 flex-wrap justify-content-between border border-light gap-5 margin-cont">  
+        {% for space in spaces %}
+
+        <div class="card bg-primary text-light  shadow-lg" style="width: 18rem;">
+            <div class="card-body">
+              <h6 class="card-title ul">Listed By: <br>
+                <h5 class="shadow"> {{space.name}}</h5>
+            </h6>
+              <h6 class="card-subtitle mb-2 text-price">Price: £{{space.price}}</h6>
+              <p class="card-text">Address: {{space.address}}.</p>
+              
+              
+              <a href="/listing/{{space.id}}" class="card-link"><button class="btn btn-success border border-light"> Listings</button></a>
+            </div>
+          </div>
+       
         {% endfor %}
+    </div>
     </body>
 </html>
