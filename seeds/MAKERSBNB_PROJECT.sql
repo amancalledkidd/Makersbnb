@@ -21,14 +21,13 @@ CREATE TABLE users (
 
 CREATE SEQUENCE IF NOT EXISTS spaces_id_seq;
 CREATE TABLE spaces (
-
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) ,
     address VARCHAR(50) ,
     price FLOAT,
     description VARCHAR(125),
-
     user_id INT,
+    image_url TEXT,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -51,11 +50,11 @@ INSERT INTO users (name, email, password, phone_number) VALUES
 ('Yasien Watkin', 'yasien@makers.com', 'binaryhustler1', '05556667777');
 
 
-INSERT INTO spaces (name, address, price, description, user_id) values ('Lind', 'Suite 17', 4.53, 'value-added', 1);
-INSERT INTO spaces (name, address, price, description, user_id) values ('Therese', 'Apt 1847', 4.33, 'coherent', 2);
-INSERT INTO spaces (name, address, price, description, user_id) values ('Kenn', 'PO Box 66640', 5.77, 'moderator', 3);
-INSERT INTO spaces (name, address, price, description, user_id) values ('Abey', 'Suite 61', 0.91, 'Configurable', 4);
-INSERT INTO spaces (name, address, price, description, user_id) values ('Elna', 'Room 450', 5.97, 'Visionary', 4);
+INSERT INTO spaces (name, address, price, description, user_id, image_url) values ('Lind', 'Suite 17', 4.53, 'value-added', 1, 'https://images.pexels.com/photos/1612351/pexels-photo-1612351.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+INSERT INTO spaces (name, address, price, description, user_id, image_url) values ('Therese', 'Apt 1847', 4.33, 'coherent', 2, 'https://images.pexels.com/photos/3958958/pexels-photo-3958958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+INSERT INTO spaces (name, address, price, description, user_id, image_url) values ('Kenn', 'PO Box 66640', 5.77, 'moderator', 3, 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+INSERT INTO spaces (name, address, price, description, user_id, image_url) values ('Abey', 'Suite 61', 0.91, 'Configurable', 4, 'https://images.pexels.com/photos/164558/pexels-photo-164558.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+INSERT INTO spaces (name, address, price, description, user_id, image_url) values ('Elna', 'Room 450', 5.97, 'Visionary', 4, 'https://images.pexels.com/photos/7031405/pexels-photo-7031405.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 
 INSERT INTO bookings (start_date, end_date, total_price, user_id, space_id) VALUES
 ('2023-08-10', '2023-08-12', 400.00, 1, 2),

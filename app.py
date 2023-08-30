@@ -1,20 +1,27 @@
 import os
 from flask import Flask, request, render_template
 from lib.database_connection import get_flask_database_connection
+from lib.space import *
+from lib.space_repository import *
 from lib.user_repository import UserRepository
 from lib.user import User
 
 # Create a new Flask app
 app = Flask(__name__)
 
-# == Your Routes Here ==
-
-# GET /
-# Returns the homepage
-
-@app.route('/', methods=['GET'])
+@app.route('/spaces', methods=['GET'])
 def get_index():
-    return render_template('index.html')
+    connection = get_flask_database_connection(app)
+    repository = SpaceRepository(connection)
+    spaces = repository.all()
+    return render_template('spaces.html', spaces=spaces )
+
+@app.route('/spaces/<id>', methods=['GET'])
+def get_index_redirect(id):
+    connection = get_flask_database_connection(app)
+    repository = SpaceRepository(connection)
+    space = repository.find(id)
+    return render_template('space.html', space=space)
 
 @app.route('/signup')
 def signup():
