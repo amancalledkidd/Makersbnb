@@ -10,14 +10,22 @@
         <link rel="stylesheet" href="/static/style.css" >
     </head>
     <body>
-        <h1>This is the homepage.</h1>
+        <nav><button>Log in</button></nav>
+        <div class="cta-card">
+            <button></button>
 
+        </div>
+        
         {% for space in spaces %}
         <div>
             Address: {{space.address}}
+            Name: {{space.name}}
+            Price: {{space.price}}
+
+            <a href="/listing/{{space.id}}"><button> Listings</button></a>
             
 
         </div>
-
+        {% endfor %}
     </body>
 </html>
