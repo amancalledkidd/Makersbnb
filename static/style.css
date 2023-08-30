@@ -32,7 +32,7 @@ body {
     text-shadow: 0 0.5px 0 rgb(0, 0, 0);
     text-align: center;
 }
-
+/* buttons */
 .button-green {
     --green: #aaffda;
     text-shadow: 0.3px 1px 0 #bdffbd;
@@ -70,7 +70,7 @@ body {
   .button-green:hover:before {
     transform: translateX(15em);
   }
-
+/* buttons on description */
   .button-blue {
     margin: auto auto;
     font-weight: bold;
@@ -159,3 +159,16 @@ body {
   .button-blue .span-mother2 span:nth-child(6) {
     transition: .7s;
   }
+
+  /* cards on spaces and space*/
+
+  .card{
+    
+    transition: all 300ms ease-in-out;
+  }
+  .card:hover{
+    transform:  scale(1.03);
+    box-shadow: 0 0 2px #fff,0 0 4px rgb(86, 253, 61), 0 0 8px rgb(48, 255, 16),0 0 16px rgb(178, 255, 166);
+  }
+
+
