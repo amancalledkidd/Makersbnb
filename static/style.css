@@ -1,31 +1,33 @@
-
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Jost', sans-serif;
-    
+
 }
 
-.title-main{
+.title-main {
     font-size: 3.2rem;
     text-shadow: 0 2px 0 rgb(37, 132, 255);
 }
-.text-price{
+
+.text-price {
     font-size: 2rem;
-    text-shadow: 0 2px 0  rgb(0, 72, 46);
+    text-shadow: 0 2px 0 rgb(0, 72, 46);
     color: rgb(169, 255, 169);
 }
 
-.margin-cont{
+.margin-cont {
     margin: 3em 1em 1em 3em;
 }
-.ul{
+
+.ul {
     text-decoration-color: antiquewhite;
-    text-decoration:dashed;
-    color:rgb(246, 255, 190);
+    text-decoration: dashed;
+    color: rgb(246, 255, 190);
 }
-.shadow{
+
+.shadow {
     border-radius: 12px;
     text-shadow: 0 0.5px 0 rgb(0, 0, 0);
     text-align: center;

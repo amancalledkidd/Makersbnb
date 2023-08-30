@@ -9,26 +9,20 @@ from lib.user import User
 # Create a new Flask app
 app = Flask(__name__)
 
-# == Your Routes Here ==
-
-# GET /
-# Returns the homepage
-# Try it:
-#   ; open http://localhost:5000/index
-
-@app.route('/', methods=['GET'])
+@app.route('/spaces', methods=['GET'])
 def get_index():
     connection = get_flask_database_connection(app)
     repository = SpaceRepository(connection)
     spaces = repository.all()
-    return render_template('index.html', spaces=spaces )
+    return render_template('spaces.html', spaces=spaces )
 
-@app.route('/listing/<id>', methods=['GET'])
+@app.route('/spaces/<id>', methods=['GET'])
 def get_index_redirect(id):
     connection = get_flask_database_connection(app)
     repository = SpaceRepository(connection)
     space = repository.find(id)
-    return render_template('listing.html', space=space)
+    return render_template('space.html', space=space)
+
 @app.route('/signup')
 def signup():
     return render_template('signup.html')

@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+
+<body>
+  {% include 'navbar.html' %}
+  <h1 class="text-center title-main">Makers BNB</h1>
+  <br>
+  <div class="text-center w-50 mx-auto mb-5">
+    <h2>Where Innovation Meets Vacation!</h2>
+    <p>
+      Welcome to Makers BnB, your creative retreat in the heart of the city! Our vacation rental is designed with
+      creators, innovators, and tech enthusiasts in mind, offering a unique blend of comfort, inspiration, and
+      state-of-the-art amenities. Whether you're a coder, designer, artist, or just a lover of all things tech, our
+      space will ignite your imagination and make your stay a memorable one. We're not just a place to rest your head;
+      we're an experience that fuses the thrill of creation with the relaxation of a vacation. Get ready to build,
+      brainstorm, and unwind in style at Makers BnB.
+    </p>
+  </div>
+
+  {%if user%}
+  <p>Logged in as {{user.name}}</p>
+  {%endif%}
+
+  <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-5">
+    {% for space in spaces %}
+    <div class="card bg-primary text-light  shadow-lg" style="width: 18rem;">
+      <img src="{{space.image_url}}" class="card-img-top" alt="space-img">
+      <div class="card-body">
+        <h5 class="shadow"> {{space.name}}</h5>
+        <h6 class="card-subtitle mb-2 text-price">Price: £{{space.price}}</h6>
+        <p class="card-text">Address: {{space.address}}.</p>
+        <a href="/spaces/{{space.id}}" class="card-link"><button class="btn btn-success border border-light">
+            More Info</button></a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+
+</html>
