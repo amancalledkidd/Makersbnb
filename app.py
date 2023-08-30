@@ -3,6 +3,8 @@ from flask import Flask, request, render_template
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository
 from lib.user import User
+from lib.space_repository import SpaceRepository
+from lib.space import Space
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -19,6 +21,35 @@ def get_index():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+
+@app.route('/spaces/new')
+def spaces():
+    return render_template('list.html')
+
+@app.route('/requests')
+def requests():
+    return render_template('requests.html')
+
+@app.route('/spaces/new', methods=['POST'])
+def post_list():
+    connection = get_flask_database_connection(app)
+    name = request.form['name']
+    addressline = request.form['addressline']
+    city = request.form['city']
+    postcode = request.form['postcode']
+    address = f"{addressline}, {city}, {postcode}"
+    price = request.form['price']
+    description = request.form['description']
+    # start_date = request.form['start_date']
+    # end_date = request.form['end_date']
+    user_id = request.form['user_id']
+
+    space_repository = SpaceRepository(connection)
+    new_space = Space(None, name, address, price, description, user_id)
+    space_repository.create(new_space)
+
+    return render_template('list.html')
+
 
 
 @app.route('/signup', methods=['POST'])

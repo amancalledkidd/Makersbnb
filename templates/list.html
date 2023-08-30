@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaces</title>
+</head>
+<body>
+    <h1>Listing Spaces</h1>
+    <form action="/spaces/new" method="POST">
+        <div>
+            <label for="name">Name</label>
+            <input required type="text" name="name" id="name" pattern="[a-zA-Z ]*"/>
+        </div>
+        <div>
+            <label for="addressline">Address Line 1</label>
+            <input required type="text" name="addressline" id="addressline" />
+        </div>
+        <div>
+            <label for="city">Town/City</label>
+            <input required type="text" name="city" id="city" />
+        </div>
+        <div>
+            <label for="postcode">Postcode</label>
+            <input required type="text" name="postcode" id="postcode" />
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <input required type="text" name="description" id="description" />
+        </div>
+        <div>
+            <label for="price">Price per night (£)</label>
+            <input required type="number" name="price" id="price" />
+        </div>
+        <div>
+            <label for="start_date">Available from (YY/MM/DD)</label>
+            <input required type="date" name="start_date" id="start_date" />
+        </div>
+        <div>
+            <label for="end_date">Available to (YY/MM/DD)</label>
+            <input required type="date" name="end_date" id="end_date" />
+        </div>
+        <div>
+            <label for="user_id">user id</label>
+            <input required type="number" name="user_id" id="user_id" />
+        </div>
+        <input class='button' type="submit" value='Register'>
+    </form>
+</body>
+</html>
