@@ -10,6 +10,14 @@
         <link rel="stylesheet" href="/static/style.css" >
     </head>
     <body>
-        <p>This is the homepage.</h1>
+        <h1>This is the homepage.</h1>
+
+        {% for space in spaces %}
+        <div>
+            Address: {{space.address}}
+            
+
+        </div>
+
     </body>
 </html>
