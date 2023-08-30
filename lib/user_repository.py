@@ -27,3 +27,16 @@ class UserRepository:
         row = rows[0]
         return User(row["id"], row["name"], row["email"],
                     row["password"], row["phone_number"])
+    
+    def find_by_email(self, user_email):
+        rows = self._connection.execute(
+            'SELECT * from users WHERE email = %s', [user_email])
+        row = rows[0]
+        return User(row["id"], row["name"], row["email"],
+                    row["password"], row["phone_number"])
+    
+    # def check_email_and_password(self, email, password):
+    #     user = self.find_by_email(email)
+    #     return user.password == password
+            
+        

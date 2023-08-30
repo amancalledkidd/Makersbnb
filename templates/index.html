@@ -10,9 +10,20 @@
         <link rel="stylesheet" href="/static/style.css" >
     </head>
     <body>
-        <nav><button>Log in</button></nav>
+        <h1>This is the homepage.</h1>
+        {%if user%}
+        <p>Logged in as {{user.name}}</p>
+        {%endif%}
+        <a href="{{url_for('signup')}}">Signup Page</a><br>
+        <a href="{{url_for('login')}}">Login Page</a>
+        <nav>
+            <a href=''><img src='' title="Logo"></a>
+            <a href=''><button>Log in</button></a>
+            <a href=''><button>Spaces</button></a>
+            <a href=''><button>Requests</button></a>
+        </nav>
         <div class="cta-card">
-            <button></button>
+            <button>Sign Up</button>
 
         </div>
         
