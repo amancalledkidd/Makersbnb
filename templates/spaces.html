@@ -25,11 +25,20 @@
     <div class="card bg-primary text-light  shadow-lg margin-cont" style="width: 18rem;">
       <img src="{{space.image_url}}" class="card-img-top" alt="space-img">
       <div class="card-body">
-        <h5 class="shadow"> {{space.name}}</h5>
-        <h6 class="card-subtitle mb-2 text-price">Price: £{{space.price}}</h6>
-        <p class="card-text">Address: {{space.address}}.</p>
-        <a href="/spaces/{{space.id}}" class="card-link"><button class="btn btn-success border border-light">
-            More Info</button></a>
+        <h5 class="shadow"> 
+          {{space.name}}
+        </h5>
+        <h6 class="card-subtitle mb-2 text-price">
+          Price: £{{space.price}}
+        </h6>
+        <p class="card-text">
+          Address: {{space.address}}.
+        </p>
+        <a href="/spaces/{{space.id}}" class="card-link">
+          <button class="btn btn-success border border-light button-green">
+            More Info
+          </button>
+        </a>
       </div>
     </div>
     {% endfor %}
