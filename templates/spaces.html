@@ -20,9 +20,9 @@
   <p>Logged in as {{user.name}}</p>
   {%endif%}
 
-  <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-5">
+  <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-5"><br><br>
     {% for space in spaces %}
-    <div class="card bg-primary text-light  shadow-lg" style="width: 18rem;">
+    <div class="card bg-primary text-light  shadow-lg margin-cont" style="width: 18rem;">
       <img src="{{space.image_url}}" class="card-img-top" alt="space-img">
       <div class="card-body">
         <h5 class="shadow"> {{space.name}}</h5>
