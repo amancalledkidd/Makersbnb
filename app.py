@@ -21,7 +21,6 @@ def signup():
     return render_template('signup.html')
 
 
-
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
@@ -35,9 +34,15 @@ def post_signup():
     
     user_repository = UserRepository(connection)
     new_user = User(None, full_name, email, password, phone_number)
-
-    user_repository.create(new_user)
-    return app.redirect('/')
+    try: 
+        user_repository.find_by_email(email)
+        return render_template('signup.html', error="User already exists")
+        #if user exists return back to signup page with error message
+    except:
+        user_repository.create(new_user)
+        return app.redirect('/')
+        #if user doesnt exists, create into database and redirect home
+    
 
 @app.route('/login')
 def login():
@@ -50,12 +55,17 @@ def post_login():
     password = request.form['password']
 
     user_repository = UserRepository(connection)
-
-    user = user_repository.check_email_and_password(email, password)
-    if user:
-        return app.redirect('/')
-    else:
-        return render_template('login.html', error="Password incorrect")
+    try:
+        user = user_repository.find_by_email(email)
+        if user.password == password:
+            return render_template('index.html', user=user)
+        #if password matches log them in
+        else:
+            return render_template('login.html', error="Password incorrect")
+        #if user exists in database but passwords don't match then present error message
+    except:
+        return render_template('login.html', error="Email doesn't exist")
+        #if user doesn't exists in database present error message
 
 
 

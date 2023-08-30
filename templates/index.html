@@ -11,6 +11,9 @@
     </head>
     <body>
         <h1>This is the homepage.</h1>
+        {%if user%}
+        <p>Logged in as {{user.name}}</p>
+        {%endif%}
         <a href="{{url_for('signup')}}">Signup Page</a><br>
         <a href="{{url_for('login')}}">Login Page</a>
 

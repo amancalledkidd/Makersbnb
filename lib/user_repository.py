@@ -35,8 +35,8 @@ class UserRepository:
         return User(row["id"], row["name"], row["email"],
                     row["password"], row["phone_number"])
     
-    def check_email_and_password(self, email, password):
-        user = self.find_by_email(email)
-        return user.password == password
+    # def check_email_and_password(self, email, password):
+    #     user = self.find_by_email(email)
+    #     return user.password == password
             
         
