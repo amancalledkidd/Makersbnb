@@ -15,11 +15,14 @@
       we're an experience that fuses the thrill of creation with the relaxation of a vacation. Get ready to build,
       brainstorm, and unwind in style at Makers BnB.
     </p>
+    {% if user %}
+    <a href="/spaces/new" class="card-link">
+      <button class="btn btn-primary border border-light">
+        List a Space
+      </button>
+    </a>
+    {% endif %}
   </div>
-
-  {%if user%}
-  <p>Logged in as {{user.name}}</p>
-  {%endif%}
 
   <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-5"><br><br>
     {% for space in spaces %}

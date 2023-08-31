@@ -20,45 +20,15 @@
     
 </head>
 <body>
-    <div class="loader" id="loader">
-        <div class="box box0">
-          <div></div>
-        </div>
-        <div class="box box1">
-          <div></div>
-        </div>
-        <div class="box box2">
-          <div></div>
-        </div>
-        <div class="box box3">
-          <div></div>
-        </div>
-        <div class="box box4">
-          <div></div>
-        </div>
-        <div class="box box5">
-          <div></div>
-        </div>
-        <div class="box box6">
-          <div></div>
-        </div>
-        <div class="box box7">
-          <div></div>
-        </div>
-        <div class="ground">
-          <div></div>
-        </div>
-      </div>
     {% include 'navbar.html' %}
     
     <form action="/login" class="form" method="POST">
         <p>{{error}}</p>
         <div><h3>Login</h3>
-            <input placeholder="Enter your email" id="email" class="input" type="text">
-          <input placeholder="*********" class="input" id="password" type="password">
+            <input name='email' placeholder="Enter your email" id="email" class="input" type="text">
+            <input name='password' placeholder="*********" class="input" id="password" type="password">
       
         <button>Submit</button>
     </form>
-    <script rel="script" src="../static/loadin.js"></script>
 </body>
 </html>

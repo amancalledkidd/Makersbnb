@@ -6,18 +6,30 @@
             <i class="text-primary">Makers BNB</i>
         </a>
         <ul class="nav justify-content-end">
+            {% if user %}
+            <li class="nav-item">
+                <strong class="nav-link text-success">{{user.name}}</strong>
+            </li>
+            {% endif %}
             <li class="nav-item mb-2 mr-2 ml-4 mu-2">
                 <a class="nav-link" href="/spaces">Home</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/requests">Requests</a>
+                </li>
+                {% if not user %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup"><strong>Sign Up</strong></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{url_for('login')}}">Login</a>
             </li>
+            {% endif %}
+            {% if user %}
             <li class="nav-item">
-                <a class="nav-link" href="/spaces">Requests</a>
+                <a class="nav-link" href="/logout"><strong>Logout</strong></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/signup"><strong>Sign Up</strong></a>
-            </li>
+            {% endif %}
         </ul>
     </div>
 

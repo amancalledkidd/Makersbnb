@@ -28,13 +28,40 @@ def get_index():
     else:
         return render_template('index.html')
 
+@app.route('/spaces', methods=['GET'])
+def get_spaces():
+    connection = get_flask_database_connection(app)
+    space_repository = SpaceRepository(connection)
+    spaces = space_repository.all()
+    user_id = session.get('user_id')
+    if user_id:
+        user_repository = UserRepository(connection)
+        user = user_repository.find(user_id)
+        return render_template('spaces.html', user=user, spaces=spaces)
+    else:
+        return render_template('spaces.html', spaces=spaces)
+    
+@app.route('/spaces/<int:id>', methods=['GET'])
+def get_space_by_id(id):
+    connection = get_flask_database_connection(app)
+    space_repository = SpaceRepository(connection)
+    space = space_repository.find(id)
+    if space:
+        return render_template('space.html', space=space)
+    else:
+        return "Space not found", 404  # Return a 404 status if space is not found
+
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
 
 @app.route('/spaces/new')
 def spaces():
-    return render_template('list.html')
+    user_id = session.get('user_id')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
+    return render_template('list.html', user=user)
 
 @app.route('/requests')
 def requests():
@@ -62,20 +89,17 @@ def post_list():
     new_space = Space(None, name, address, price, description, user_id)
     space_repository.create(new_space)
 
-    return render_template('list.html')
+    return app.redirect('/spaces')
 
 
 
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
-    name = request.form['name'] 
+    full_name = request.form['name'] 
     email = request.form['email'] 
-    
-    full_name = name
     password = request.form['password']
     phone_number = request.form['phone_number'] 
-
     
     user_repository = UserRepository(connection)
     new_user = User(None, full_name, email, password, phone_number)
@@ -99,11 +123,11 @@ def post_login():
     email = request.form['email']
     password = request.form['password']
     user_repository = UserRepository(connection)
-      try:
+    try:
         user = user_repository.find_by_email(email)
         if user.password == password:
             session['user_id'] = user.id
-            return render_template('spaces.html', user=user)
+            return app.redirect('/spaces')
         #if password matches log them in
         else:
             return render_template('login.html', error="Password incorrect")
@@ -115,7 +139,7 @@ def post_login():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect('/')
+    return redirect('/login')
 
 
 

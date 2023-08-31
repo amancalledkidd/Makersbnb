@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spaces</title>
-</head>
+{% include 'header.html' %}
 <body>
-    <h1>Listing Spaces</h1>
+    {% include 'navbar.html' %}
+    <h1 class='text-center title-main'>Listing Spaces</h1>
     <form action="/spaces/new" method="POST">
         <div>
             <label for="name">Name</label>
@@ -40,9 +35,9 @@
             <label for="end_date">Available to (YY/MM/DD)</label>
             <input required type="date" name="end_date" id="end_date" />
         </div>
-        <div>
+        <div class="d-none">
             <label for="user_id">user id</label>
-            <input required type="number" name="user_id" id="user_id" />
+            <input required type="number" name="user_id" id="user_id" value="{{user.id}}" />
         </div>
         <input class='button' type="submit" value='Register'>
     </form>
