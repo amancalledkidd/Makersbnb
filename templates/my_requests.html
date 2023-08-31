@@ -1,0 +1,25 @@
+{% include 'header.html' %}
+<body>
+    {% include 'navbar.html' %}
+    <h1 class="text-center title-main">My Requests</h1>
+        <div>
+            {%for booking in user.bookings%}
+            
+            <div class="card mx-auto shadow-lg margin-cont" style="width: 30rem;">
+                <div class="card-body">
+                    <h5 class="card-text text-primary">{{booking.space_name}} {{booking.space_address}}</h5>
+                    <p class="card-title">{{booking.start_date}} - {{booking.end_date}}</p>
+                    <p class="card-title">£{{(booking.total_price * 1.0)|round(2)}}</p>
+                    {% if booking.confirmed%}
+                    <p class="card-title">Booking confirmed</p>
+                    {% else %}
+                    <p class="card-title">Booking not confirmed</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+
+</body>
+</html>
