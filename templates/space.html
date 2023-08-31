@@ -14,22 +14,26 @@
                 <li class="list-group-item text-success">£{{(space.price)|round(2)}} ppn | £{{(space.price *
                     7)|round(2)}} ppw</li>
             </ul>
+
             <div class="card-body">
-                <button class="btn btn-primary button-blue">
-                    <span class="span-mother">
-                        <span>B</span>
-                        <span>o</span>
-                        <span>o</span>
-                        <span>k</span>
-                      
-                    </span>
-                    <span class="span-mother2">
-                        <span>B</span>
-                        <span>o</span>
-                        <span>o</span>
-                        <span>k</span>
-                    </span>
-                    </button>
+                <form action="/spaces/{{space.id}}" method="POST">
+                    <input type="date" name="date" id="date"/>
+                    <button class="btn btn-primary button-blue">
+                        <span class="span-mother">
+                            <span>B</span>
+                            <span>o</span>
+                            <span>o</span>
+                            <span>k</span>
+                          
+                        </span>
+                        <span class="span-mother2">
+                            <span>B</span>
+                            <span>o</span>
+                            <span>o</span>
+                            <span>k</span>
+                        </span>
+                        </button>
+                </form>
             
             </div>
         </div>

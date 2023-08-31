@@ -1,11 +1,14 @@
 class Booking:
-    def __init__(self, id, start_date, end_date, total_price, user_id, space_id) -> None:
+    def __init__(self, id, start_date, end_date, total_price, user_id, space_id, confirmed=False) -> None:
         self.id = id
         self.start_date = start_date
         self.end_date = end_date
         self.total_price = total_price
         self.user_id = user_id
         self.space_id = space_id
+        self.space_name = ''
+        self.space_address = ''
+        self.confirmed = confirmed
 
     def __eq__(self, other: object) -> bool:
         return self.__dict__ == other.__dict__
