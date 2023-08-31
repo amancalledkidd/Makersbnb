@@ -35,8 +35,10 @@ class UserRepository:
         return User(row["id"], row["name"], row["email"],
                     row["password"], row["phone_number"])
     
-    # def check_email_and_password(self, email, password):
-    #     user = self.find_by_email(email)
-    #     return user.password == password
-            
-        
+    def find_with_spaces_and_bookings(self, user_id):
+        # Needs updating to return bookings and spaces along with the user
+        rows = self._connection.execute(
+            'SELECT * from users WHERE id = %s', [user_id])
+        row = rows[0]
+        return User(row["id"], row["name"], row["email"],
+                    row["password"], row["phone_number"])

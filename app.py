@@ -21,12 +21,9 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 def get_index():
     user_id = session.get('user_id')
     if user_id:
-        connection = get_flask_database_connection(app)
-        user_repository = UserRepository(connection)
-        user = user_repository.find(user_id)
-        return render_template('index.html', user=user)
+        return app.redirect('/spaces')
     else:
-        return render_template('index.html')
+        return app.redirect('/login')
 
 @app.route('/spaces', methods=['GET'])
 def get_spaces():
