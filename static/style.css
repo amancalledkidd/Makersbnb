@@ -321,3 +321,17 @@ body {
     text-align: center;;
   }
 
+/* h1,h2,h3,h4,p{
+  color:#000;
+} */
+
+.center{
+  margin: auto auto;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items:center;
+  padding: 2em;
+  gap: 3em;
+}
+

@@ -25,6 +25,16 @@ def get_index():
     else:
         return app.redirect('/login')
 
+@app.route('/confirmation', methods = ['GET'])
+def confirmation():
+    connection = get_flask_database_connection(app)
+    user_id = session.get('user_id')
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
+    space_repository = SpaceRepository(connection)
+    spaces = space_repository.all()
+    return render_template('confirmation.html', user=user, space=spaces)
+    
 @app.route('/spaces', methods=['GET'])
 def get_spaces():
     connection = get_flask_database_connection(app)
