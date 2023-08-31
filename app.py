@@ -69,10 +69,10 @@ def post_list():
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
+    name = request.form['name'] 
     email = request.form['email'] 
-    fname = request.form['fname'] 
-    lname = request.form['lname'] 
-    full_name = f"{fname} {lname}"
+    
+    full_name = name
     password = request.form['password']
     phone_number = request.form['phone_number'] 
 
@@ -99,19 +99,23 @@ def post_login():
     email = request.form['email']
     password = request.form['password']
     user_repository = UserRepository(connection)
-    user = user_repository.find_by_email(email)
-    
-    if user and user.password == password:
-        session['user_id'] = user.id
-        return redirect('/')
-    else:
-        return render_template('login.html', error="Invalid email or password")
+      try:
+        user = user_repository.find_by_email(email)
+        if user.password == password:
+            session['user_id'] = user.id
+            return render_template('spaces.html', user=user)
+        #if password matches log them in
+        else:
+            return render_template('login.html', error="Password incorrect")
+        #if user exists in database but passwords don't match then present error message
+    except:
+        return render_template('login.html', error="Email doesn't exist")
+        #if user doesn't exists in database present error message
     
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect('/')
-
 
 
 
