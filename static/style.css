@@ -32,3 +32,292 @@ body {
     text-shadow: 0 0.5px 0 rgb(0, 0, 0);
     text-align: center;
 }
+/* buttons */
+.button-green {
+    --green: #aaffda;
+    text-shadow: 0.3px 1px 0 #bdffbd;
+    font-size: 15px;
+    padding: 0.7em 2.7em;
+    letter-spacing: 0.06em;
+    position: relative;
+    font-family: inherit;
+    border-radius: 0.6em;
+    overflow: hidden;
+    transition: all 0.3s;
+    line-height: 1.4em;
+    border: 2px solid var(--green);
+    background: linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%,transparent 60% , rgba(27, 253, 156, 0.1) 100%);
+    color: var(--green);
+    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1);
+  }
+  
+  .button-green:hover {
+    color: #82ffc9;
+    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.6), 0 0 9px 3px rgba(27, 253, 156, 0.2);
+  }
+  
+  .button-green:before {
+    content: "";
+    position: absolute;
+    left: -4em;
+    width: 4em;
+    height: 100%;
+    top: 0;
+    transition: transform .4s ease-in-out;
+    background: linear-gradient(to right, transparent 1%, rgba(27, 253, 156, 0.1) 40%,rgba(27, 253, 156, 0.1) 60% , transparent 100%);
+  }
+  
+  .button-green:hover:before {
+    transform: translateX(15em);
+  }
+/* buttons on description */
+  .button-blue {
+    margin: auto auto;
+    font-weight: bold;
+    color: white;
+    border-radius: 2rem;
+    width: 95.02px;
+    height: 42.66px;
+    border: none;
+    background-color: #3653F8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .button-blue .span-mother {
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .button-blue:hover .span-mother {
+    position: absolute;
+  }
+  
+  .button-blue:hover .span-mother span {
+    transform: translateY(1.2em);
+  }
+  
+  .button-blue .span-mother span:nth-child(1) {
+    transition: .2s;
+  }
+  
+  .button-blue .span-mother span:nth-child(2) {
+    transition: .3s;
+  }
+  
+  .button-blue .span-mother span:nth-child(3) {
+    transition: .4s;
+  }
+  
+  button .span-mother span:nth-child(4) {
+    transition: .5s;
+  }
+  
+  .button-blue .span-mother span:nth-child(5) {
+    transition: .6s;
+  }
+  
+  .button-blue .span-mother span:nth-child(6) {
+    transition: .7s;
+  }
+  
+  .button-blue .span-mother2 {
+    display: flex;
+    position: absolute;
+    overflow: hidden;
+  }
+  
+  .button-blue .span-mother2 span {
+    transform: translateY(-1.2em);
+  }
+  
+  .button-blue:hover .span-mother2 span {
+    transform: translateY(0);
+  }
+  
+  .button-blue .span-mother2 span {
+    transition: .2s;
+  }
+  
+  .button-blue .span-mother2 span:nth-child(2) {
+    transition: .3s;
+  }
+  
+  .button-blue .span-mother2 span:nth-child(3) {
+    transition: .4s;
+  }
+  
+  .button-blue .span-mother2 span:nth-child(4) {
+    transition: .5s;
+  }
+  
+  .button-blue .span-mother2 span:nth-child(5) {
+    transition: .6s;
+  }
+  
+  .button-blue .span-mother2 span:nth-child(6) {
+    transition: .7s;
+  }
+
+  /* cards on spaces and space*/
+
+  .card{
+    
+    transition: all 300ms ease-in-out;
+  }
+  .card:hover{
+    transform:  scale(1.03);
+    box-shadow: 0 0 2px #fff,0 0 4px rgb(86, 253, 61), 0 0 8px rgb(48, 255, 16),0 0 16px rgb(178, 255, 166);
+  }
+
+  /* appear */
+
+  .appear{
+    opacity: 0;
+    animation: appear 900ms 1 forwards;
+    transition: all 1300ms ease-in-out; 
+  }
+  @keyframes appear{
+    0%{
+        opacity:0;
+        color: rgb(205, 255, 205);
+    }
+    100%{
+        opacity:1;
+        color: rgb(0, 0, 0);
+    }
+  }
+
+  /* connect css */
+  .main {
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  
+  .up {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+  
+  .down {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+  
+  .card1 {
+    width: 90px;
+    height: 90px;
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 90px 5px 5px 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    transition: .2s ease-in-out;
+  }
+  
+  .instagram {
+    margin-top: 1.5em;
+    margin-left: 1.2em;
+    fill: #cc39a4;
+  }
+  
+  .card2 {
+    width: 90px;
+    height: 90px;
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 5px 90px 5px 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    transition: .2s ease-in-out;
+  }
+  
+  .twitter {
+    margin-top: 1.5em;
+    margin-left: -.9em;
+    fill: #03A9F4;
+  }
+  
+  .card3 {
+    width: 90px;
+    height: 90px;
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 5px 5px 5px 90px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    transition: .2s ease-in-out;
+  }
+  
+  .github {
+    margin-top: -.6em;
+    margin-left: 1.2em;
+  }
+  
+  .card4 {
+    width: 90px;
+    height: 90px;
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 5px 5px 90px 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    transition: .2s ease-in-out;
+  }
+  
+  .discord {
+    margin-top: -.9em;
+    margin-left: -1.2em;
+    fill: #8c9eff;
+  }
+  
+  .card1:hover {
+    cursor: pointer;
+    scale: 1.1;
+    background-color: #cc39a4;
+  }
+  
+  .card1:hover .instagram {
+    fill: white;
+  }
+  
+  .card2:hover {
+    cursor: pointer;
+    scale: 1.1;
+    background-color: #03A9F4;
+  }
+  
+  .card2:hover .twitter {
+    fill: white;
+  }
+  
+  .card3:hover {
+    cursor: pointer;
+    scale: 1.1;
+    background-color: black;
+  }
+  
+  .card3:hover .github {
+    fill: white;
+  }
+  
+  .card4:hover {
+    cursor: pointer;
+    scale: 1.1;
+    background-color: #8c9eff;
+  }
+  
+  .card4:hover .discord {
+    fill: white;
+  }
+
+  .bottom-hero{
+    text-align: center;;
+  }
+

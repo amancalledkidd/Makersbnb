@@ -4,7 +4,7 @@
     {% include 'navbar.html' %}
     <div class="margin-cont text-center">
         <h1 class="border-bottom border-primary mb-4 title-main">{{space.name}}</h1>
-        <div class="card mx-auto shadow-lg" style="width: 30rem;">
+        <div class="card mx-auto shadow-lg margin-cont" style="width: 30rem;">
             <img src="{{space.image_url}}" class="card-img-top" alt="listing-image">
             <div class="card-body">
                 <p class="card-title">{{space.description}}</p>
@@ -15,7 +15,22 @@
                     7)|round(2)}} ppw</li>
             </ul>
             <div class="card-body">
-                <a href="#" class="btn btn-primary">Book</a>
+                <button class="btn btn-primary button-blue">
+                    <span class="span-mother">
+                        <span>B</span>
+                        <span>o</span>
+                        <span>o</span>
+                        <span>k</span>
+                      
+                    </span>
+                    <span class="span-mother2">
+                        <span>B</span>
+                        <span>o</span>
+                        <span>o</span>
+                        <span>k</span>
+                    </span>
+                    </button>
+            
             </div>
         </div>
     </div>

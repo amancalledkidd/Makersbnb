@@ -31,10 +31,10 @@ def signup():
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
+    name = request.form['name'] 
     email = request.form['email'] 
-    fname = request.form['fname'] 
-    lname = request.form['lname'] 
-    full_name = f"{fname} {lname}"
+    
+    full_name = name
     password = request.form['password']
     phone_number = request.form['phone_number'] 
 
@@ -65,7 +65,7 @@ def post_login():
     try:
         user = user_repository.find_by_email(email)
         if user.password == password:
-            return render_template('index.html', user=user)
+            return render_template('spaces.html', user=user)
         #if password matches log them in
         else:
             return render_template('login.html', error="Password incorrect")
