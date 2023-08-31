@@ -34,7 +34,7 @@ def confirmation():
     space_repository = SpaceRepository(connection)
     spaces = space_repository.all()
     return render_template('confirmation.html', user=user, space=spaces)
-    
+
 @app.route('/spaces', methods=['GET'])
 def get_spaces():
     connection = get_flask_database_connection(app)
