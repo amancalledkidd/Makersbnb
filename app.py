@@ -1,31 +1,69 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.space import *
 from lib.space_repository import *
 from lib.user_repository import UserRepository
 from lib.user import User
+from lib.space_repository import SpaceRepository
+from lib.space import Space
 
 # Create a new Flask app
 app = Flask(__name__)
 
-@app.route('/spaces', methods=['GET'])
-def get_index():
-    connection = get_flask_database_connection(app)
-    repository = SpaceRepository(connection)
-    spaces = repository.all()
-    return render_template('spaces.html', spaces=spaces )
+# == Your Routes Here ==
 
-@app.route('/spaces/<id>', methods=['GET'])
-def get_index_redirect(id):
-    connection = get_flask_database_connection(app)
-    repository = SpaceRepository(connection)
-    space = repository.find(id)
-    return render_template('space.html', space=space)
+# GET /
+# Returns the homepage
+app.config['SECRET_KEY'] = 'your_secret_key'
+
+@app.route('/', methods=['GET'])
+def get_index():
+    user_id = session.get('user_id')
+    if user_id:
+        connection = get_flask_database_connection(app)
+        user_repository = UserRepository(connection)
+        user = user_repository.find(user_id)
+        return render_template('index.html', user=user)
+    else:
+        return render_template('index.html')
 
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+
+@app.route('/spaces/new')
+def spaces():
+    return render_template('list.html')
+
+@app.route('/requests')
+def requests():
+    user_id = session.get('user_id')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
+    return render_template('requests.html', user=user)
+
+@app.route('/spaces/new', methods=['POST'])
+def post_list():
+    connection = get_flask_database_connection(app)
+    name = request.form['name']
+    addressline = request.form['addressline']
+    city = request.form['city']
+    postcode = request.form['postcode']
+    address = f"{addressline}, {city}, {postcode}"
+    price = request.form['price']
+    description = request.form['description']
+    # start_date = request.form['start_date']
+    # end_date = request.form['end_date']
+    user_id = request.form['user_id']
+
+    space_repository = SpaceRepository(connection)
+    new_space = Space(None, name, address, price, description, user_id)
+    space_repository.create(new_space)
+
+    return render_template('list.html')
+
 
 
 @app.route('/signup', methods=['POST'])
@@ -58,13 +96,13 @@ def login():
 @app.route('/login', methods=['POST'])
 def post_login():
     connection = get_flask_database_connection(app)
-    email = request.form['email'] 
+    email = request.form['email']
     password = request.form['password']
-
     user_repository = UserRepository(connection)
-    try:
+      try:
         user = user_repository.find_by_email(email)
         if user.password == password:
+            session['user_id'] = user.id
             return render_template('spaces.html', user=user)
         #if password matches log them in
         else:
@@ -73,6 +111,11 @@ def post_login():
     except:
         return render_template('login.html', error="Email doesn't exist")
         #if user doesn't exists in database present error message
+    
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect('/')
 
 
 

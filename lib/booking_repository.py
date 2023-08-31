@@ -27,3 +27,4 @@ class BookingRepository:
         row = rows[0]
         return Booking(row["id"], row["start_date"], row["end_date"],
                        row["total_price"], row["user_id"], row["space_id"])
+    

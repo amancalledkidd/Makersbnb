@@ -1,6 +1,4 @@
 from lib.space import Space
-
-
 class SpaceRepository():
     def __init__(self, connection):
         self._connection = connection
