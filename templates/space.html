@@ -1,0 +1,25 @@
+{% include 'header.html' %}
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="margin-cont text-center">
+        <h1 class="border-bottom border-primary mb-4 title-main">{{space.name}}</h1>
+        <div class="card mx-auto shadow-lg" style="width: 30rem;">
+            <img src="{{space.image_url}}" class="card-img-top" alt="listing-image">
+            <div class="card-body">
+                <p class="card-title">{{space.description}}</p>
+                <h5 class="card-text text-primary">{{space.address}}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-success">£{{(space.price)|round(2)}} ppn | £{{(space.price *
+                    7)|round(2)}} ppw</li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary">Book</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
