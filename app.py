@@ -7,6 +7,8 @@ from lib.user_repository import UserRepository
 from lib.user import User
 from lib.space_repository import SpaceRepository
 from lib.space import Space
+from lib.booking_repository import BookingRepository
+from lib.booking import Booking
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -43,10 +45,28 @@ def get_space_by_id(id):
     connection = get_flask_database_connection(app)
     space_repository = SpaceRepository(connection)
     space = space_repository.find(id)
+    user_id = session.get('user_id')
+    if user_id:
+        user_repository = UserRepository(connection)
+        user = user_repository.find(user_id)
     if space:
-        return render_template('space.html', space=space)
+        return render_template('space.html', space=space, user=user)
     else:
         return "Space not found", 404  # Return a 404 status if space is not found
+
+@app.route('/spaces/<int:id>', methods=['POST'])
+def book_new_request(id):
+    connection = get_flask_database_connection(app)
+    space_repository = SpaceRepository(connection)
+    user_id = session.get('user_id')
+    space_id = id
+    space = space_repository.find(space_id)
+    date = request.get('date')
+    booking_repo = BookingRepository(connection)
+    booking = Booking(None, date, date, space.price, user_id, space_id)
+    booking_repo.create(booking)
+    return app.redirect(f'/spaces/{space_id}')
+
 
 @app.route('/signup')
 def signup():
@@ -60,13 +80,25 @@ def spaces():
     user = user_repository.find(user_id)
     return render_template('list.html', user=user)
 
-@app.route('/requests')
+@app.route('/my_requests')
 def requests():
     user_id = session.get('user_id')
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-    user = user_repository.find(user_id)
-    return render_template('requests.html', user=user)
+    user = user_repository.find_user_with_bookings(user_id)
+    print(user)
+    print(user.bookings)
+    space_repo = SpaceRepository(connection)
+    spaces = []
+    # for space_id in user.bookings:
+    #     space = space_repo.find(space_id)
+    #     spaces.append(space)
+
+    return render_template('my_requests.html', user=user, spaces=spaces)
+
+
+
+
 
 @app.route('/spaces/new', methods=['POST'])
 def post_list():
