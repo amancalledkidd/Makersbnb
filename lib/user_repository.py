@@ -1,6 +1,9 @@
 from lib.user import User
 from lib.booking import Booking
 from lib.space import Space
+from flask import flash,redirect
+
+import re
 
 class UserRepository:
     def __init__(self, db_connection) -> None:
@@ -16,6 +19,13 @@ class UserRepository:
         return users
 
     def create(self, user):
+        password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
+        password_regex = re.compile(password_pattern)
+
+        if not re.fullmatch(password_regex, user.password):
+            flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+            return redirect('/signup')
+
         rows = self._connection.execute('INSERT INTO users (name, email, password, phone_number) VALUES (%s, %s, %s, %s) RETURNING id', [
                                         user.name, user.email, user.password, user.phone_number])
         row = rows[0]
