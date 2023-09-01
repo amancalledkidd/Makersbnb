@@ -1,6 +1,10 @@
 from lib.user import User
 from lib.booking import Booking
+from lib.booking_repository import BookingRepository
 from lib.space import Space
+from flask import flash,redirect
+
+import re
 
 class UserRepository:
     def __init__(self, db_connection) -> None:
@@ -16,6 +20,13 @@ class UserRepository:
         return users
 
     def create(self, user):
+        password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
+        password_regex = re.compile(password_pattern)
+
+        if not re.fullmatch(password_regex, user.password):
+            flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+            return redirect('/signup')
+
         rows = self._connection.execute('INSERT INTO users (name, email, password, phone_number) VALUES (%s, %s, %s, %s) RETURNING id', [
                                         user.name, user.email, user.password, user.phone_number])
         row = rows[0]
@@ -53,19 +64,24 @@ class UserRepository:
     
     def find_with_spaces_and_bookings(self, user_id):
         rows = self._connection.execute(
-            'SELECT users.id, users.email, users.password, spaces.id AS space_id, spaces.name AS space_name, spaces.description, spaces.price, spaces.user_id, spaces.image_url FROM users JOIN spaces ON users.id = spaces.user_id WHERE users.id = %s', [user_id])
+            'SELECT users.id, users.name as user_name, users.email, users.password, users.phone_number, spaces.id AS space_id, spaces.name AS space_name, spaces.description, spaces.price, spaces.user_id, spaces.image_url FROM users JOIN spaces ON users.id = spaces.user_id WHERE users.id = %s', [user_id])
         spaces = []
         for row in rows:
             print(row)
             space = Space(row['space_id'], row['space_name'], row['price'], row['description'], row['user_id'], row['image_url'])
             spaces.append(space)
-        print(spaces)
-        rows = self._connection.execute(
-            'SELECT users.id, users.email, users.password, ' \
-            'bookings.id AS booking_id, bookings.start_date, bookings.confirmed, bookings.booked_by, bookings.space_id ' \
-            'FROM users JOIN bookings ON users.id = bookings.booked_by WHERE users.id = %s', [user_id])
+        user = User(row['id'], row['user_name'], row['email'], row['password'], row['phone_number'])
+        user.spaces = spaces
+
+        rows = self._connection.execute('SELECT * from bookings WHERE user_id = %s', [user_id])
+            # 'SELECT users.id, users.email, users.password, bookings.id AS booking_id, bookings.start_date, bookings.end_date, bookings.confirmed, bookings.booked_by, bookings.space_id FROM users JOIN bookings ON users.id = bookings.id WHERE users.id = %s', [user_id])
         bookings = []
+        booking_repository = BookingRepository(self._connection)
         for row in rows:
-            bookings.append(Booking(row['booking_id'], row['start_date'], row['confirmed'], row['booked_by'], row['space_id']))
-        user = User(row['id'], row['email'], row['password'], spaces, bookings)
+            booking_id = row['id']
+            booking = booking_repository.find(booking_id)
+            bookings.append(booking)
+        user.bookings = bookings
+        print(user.bookings)
+        print(user)
         return user

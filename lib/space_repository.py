@@ -47,3 +47,5 @@ class SpaceRepository():
                                  [space.name, space.address, space.price, space.description, space.user_id, space.id, space.image_url])
         return None
     # updates an already present space
+
+    

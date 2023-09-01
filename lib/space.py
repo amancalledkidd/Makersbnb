@@ -1,11 +1,14 @@
+# from lib.booking_repository import BookingRepository
+
 class Space:
-    def __init__(self, id, name, address, price, description, user_id, image_url=''):
+    def __init__(self, id, name, address, price, description, user_id, image_url='', bookings=[]):
         self.id = id
         self.name = name
         self.address = address
         self.price = price
         self.description = description
         self.user_id = user_id
+        self.bookings = bookings
         if image_url == '':
             self.image_url = 'https://images.pexels.com/photos/1612351/pexels-photo-1612351.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
         else:
@@ -16,3 +19,7 @@ class Space:
 
     def __repr__(self):
         return f'Space({self.id}, {self.name}, {self.address}, {self.price}, {self.description}, {self.user_id})'
+    
+    # def get_bookings(self):
+    #     booking_repo = BookingRepository(self._connection)
+    #     bookings = booking_repo.find_by_space_id(self)

@@ -41,3 +41,10 @@ def test_find_user_by_id(db_connection):
     user = repository.find(2)
     assert user == User(2, 'Muhammad Mehmood',
                         'muhammad@gmail.com', 'makers321', '09876543210')
+
+def test_find_user_with_bookings_and_spaces(db_connection):
+    db_connection.seed("seeds/MAKERSBNB_PROJECT.sql")
+    repository = UserRepository(db_connection)
+    user = repository.find_with_spaces_and_bookings(1)
+    print(user.bookings[0].space.name)
+    assert user.bookings[0].space.name == 'Therese'
