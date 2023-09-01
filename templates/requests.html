@@ -2,16 +2,55 @@
 <body>
     {% include 'navbar.html' %}
     <h1 class="text-center title-main">Requests</h1>
-    <form action="/requests">
-        <div>
-            <h1>Requests I've Made</h1>
-            <p>name:{{user.name}}</p>
+        <div class="d-flex justify-content-center gap-5">
+            <div>
+                <h2 class="text-center">Sent</h2>
+                {%for booking in user.bookings%}
+                <div data-id="{{booking.space_id}}" class="request card mx-auto shadow margin-cont" style="width: 20rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{booking.space.name}}</h5>
+                        <p>{{booking.space.address}}</p>
+                        <p class="card-text">{{booking.start_date.strftime('%a %d %b %Y')}} - {{booking.end_date.strftime('%a %d %b
+                            %Y')}}</p>
+                        <p class="card-text text-success">£{{(booking.total_price * 1.0)|round(2)}}</p>
+                        {% if booking.confirmed%}
+                        <p class="card-text text-success">Booking confirmed</p>
+                        {% else %}
+                        <p class="card-text text-danger">Booking not confirmed</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+                <div>
+                    <h2 class="text-center">Recieved</h2>
+                    {%for space in user.spaces%}
+                    {%for booking in space.bookings%}
+                    {% if not booking.confirmed%}
+                    <div data-id="{{booking.id}}" class="card mx-auto shadow margin-cont" style="width: 20rem;">
+                        <div class="card-body">
+                            <h5 class="card-text text-primary">{{space.name}}</h5>
+                            <p class="card-title">{{booking.start_date.strftime('%a %d %b %Y')}} - {{booking.end_date.strftime('%a %d %b
+                                %Y')}}</p>
+                            <p class="card-title text-success">£{{(booking.total_price * 1.0)|round(2)}}</p>
+                            <a href="/confirm/{{booking.id}}"><button class="btn btn-success" type="button">Confirm</button></a>
+                            <a href="/reject/{{booking.id}}"><button class="btn btn-danger" type="button">Reject</button></a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    </div>
         </div>
-        <div>
-            <h1>Requests I've Recieved</h1>
-            <label for="addressline">Address Line 1</label>
-            <input required type="text" name="addressline" id="addressline" />
-        </div>
-
+        
+<script>
+    const requests = document.querySelectorAll('.request');
+    requests.forEach(request => {
+        request.addEventListener('click', function (e) {
+            const space_id = (e.currentTarget.dataset.id);
+            window.location.href = `/spaces/${space_id}`;
+        });
+    });
+</script>
 </body>
 </html>

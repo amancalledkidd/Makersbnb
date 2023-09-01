@@ -1,14 +1,14 @@
 import os
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for, flash
 from lib.database_connection import get_flask_database_connection
-from lib.space import *
-from lib.space_repository import *
 from lib.user_repository import UserRepository
 from lib.user import User
 from lib.space_repository import SpaceRepository
 from lib.space import Space
 from lib.booking_repository import BookingRepository
 from lib.booking import Booking
+import phonenumbers
+import re
 from flask_mail import Mail, Message
 
 # Create a new Flask app
@@ -96,7 +96,7 @@ We've received your booking request and it's now waiting for the host's confirma
 Best Regards,
 MakersBnB Team"""
             mail.send(msg)
-    return app.redirect(f'/my_requests')
+    return app.redirect(f'/requests')
 
 
 @app.route('/spaces/new')
@@ -138,13 +138,33 @@ MakersBnB Team"""
             mail.send(msg)
     return app.redirect('/spaces')
 
-@app.route('/my_requests')
+@app.route('/requests')
 def requests():
     user_id = session.get('user_id')
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-    user = user_repository.find_user_with_bookings(user_id)
-    return render_template('my_requests.html', user=user)
+    user = user_repository.find_with_spaces_and_bookings(user_id)
+    booking_repository = BookingRepository(connection)
+    for space in user.spaces:
+        x = booking_repository.find_by_space_id(space)
+    return render_template('requests.html', user=user)
+
+@app.route('/confirm/<id>', methods=['GET'])
+def confirm(id):
+    connection = get_flask_database_connection(app)
+    booking_repository = BookingRepository(connection)
+    booking = booking_repository.find(id)
+    booking_repository.confirm(booking)
+    return app.redirect('/requests')
+
+@app.route('/reject/<id>', methods=['GET'])
+def reject(id):
+    connection = get_flask_database_connection(app)
+    booking_repository = BookingRepository(connection)
+    booking = booking_repository.find(id)
+    booking_repository.reject(booking)
+    return app.redirect('/requests')
+
 
 @app.route('/signup')
 def signup():
@@ -153,23 +173,40 @@ def signup():
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
     fname = request.form['fname']
     lname = request.form['lname']
     full_name = f"{fname} {lname}"
     email = request.form['email'] 
+    phone_number = request.form['phone_number']
     password = request.form['password']
     password2 = request.form['password2']
+    password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
+    password_regex = re.compile(password_pattern)
+
+    if not re.fullmatch(password_regex, password):
+        flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+        return redirect('/signup')
     if password != password2:
-        return render_template('signup.html', error="Passwords don't match")
-    phone_number = request.form['phone_number']
+        flash("Passwords don't match")
+        return redirect('/signup')
+
     
-    user_repository = UserRepository(connection)
-    new_user = User(None, full_name, email, password, phone_number)
-    try: 
+    #install pip phonenumber
+    try:
+        parsed_number = phonenumbers.parse(phone_number, "GB")
+        if not phonenumbers.is_valid_number(parsed_number):
+            flash("Invalid phone number")
+            return redirect('/signup')
+    except phonenumbers.phonenumberutil.NumberParseException:
+        flash("Invalid phone number")
+        return redirect('/signup')
+    try:
         user_repository.find_by_email(email)
-        return render_template('signup.html', error="User already exists")
-        #if user exists return back to signup page with error message
+        flash("User already exists")
+        return redirect('/signup')
     except:
+        new_user = User(None, full_name, email, password, phone_number)
         new_user = user_repository.create(new_user)
         session['user_id'] = new_user.id
         if request.method == 'POST':
