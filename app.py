@@ -99,15 +99,7 @@ def requests():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_user_with_bookings(user_id)
-    print(user)
-    print(user.bookings)
-    space_repo = SpaceRepository(connection)
-    spaces = []
-    # for space_id in user.bookings:
-    #     space = space_repo.find(space_id)
-    #     spaces.append(space)
-
-    return render_template('my_requests.html', user=user, spaces=spaces)
+    return render_template('my_requests.html', user=user)
 
 
 
