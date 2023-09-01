@@ -35,6 +35,7 @@ CREATE TABLE bookings (
     total_price float,
     user_id int,
     space_id int,
+    confirmed boolean DEFAULT FALSE,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT fk_space FOREIGN KEY (space_id) REFERENCES spaces(id)
 );

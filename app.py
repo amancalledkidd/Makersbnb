@@ -27,6 +27,19 @@ def get_index():
     else:
         return app.redirect('/login')
 
+@app.route('/confirmation/<id>', methods = ['GET'])
+def confirmation(id):
+    connection = get_flask_database_connection(app)
+    user_id = session.get('user_id')
+    user_repository = UserRepository(connection)
+    space_repository = SpaceRepository(connection)
+    user = user_repository.find_user_with_bookings(user_id)
+    booking_repository = BookingRepository(connection)
+    booking = booking_repository.find(id)
+    spaces = space_repository.all()
+    return render_template('confirmation.html',booking=booking, user=user, space=spaces)
+
+
 @app.route('/spaces', methods=['GET'])
 def get_spaces():
     connection = get_flask_database_connection(app)
@@ -86,15 +99,7 @@ def requests():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_user_with_bookings(user_id)
-    print(user)
-    print(user.bookings)
-    space_repo = SpaceRepository(connection)
-    spaces = []
-    # for space_id in user.bookings:
-    #     space = space_repo.find(space_id)
-    #     spaces.append(space)
-
-    return render_template('my_requests.html', user=user, spaces=spaces)
+    return render_template('my_requests.html', user=user)
 
 
 
