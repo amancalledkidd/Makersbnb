@@ -367,3 +367,8 @@ body {
 .request {
   cursor: pointer;
 }
+
+.error{
+  background-color:rgba(0, 0, 255, 0);
+  color: red;
+}
