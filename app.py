@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for, flash
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository
 from lib.user import User
@@ -7,6 +7,8 @@ from lib.space_repository import SpaceRepository
 from lib.space import Space
 from lib.booking_repository import BookingRepository
 from lib.booking import Booking
+import phonenumbers
+import re
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -136,29 +138,48 @@ def reject(id):
     booking_repository.reject(booking)
     return app.redirect('/requests')
 
+
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
     fname = request.form['fname']
     lname = request.form['lname']
     full_name = f"{fname} {lname}"
     email = request.form['email'] 
+    phone_number = request.form['phone_number']
     password = request.form['password']
     password2 = request.form['password2']
+    password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
+    password_regex = re.compile(password_pattern)
+
+    if not re.fullmatch(password_regex, password):
+        flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+        return redirect('/signup')
     if password != password2:
-        return render_template('signup.html', error="Passwords don't match")
-    phone_number = request.form['phone_number']
+        flash("Passwords don't match")
+        return redirect('/signup')
+
     
-    user_repository = UserRepository(connection)
-    new_user = User(None, full_name, email, password, phone_number)
-    try: 
+    #install pip phonenumber
+    try:
+        parsed_number = phonenumbers.parse(phone_number, "GB")
+        if not phonenumbers.is_valid_number(parsed_number):
+            flash("Invalid phone number")
+            return redirect('/signup')
+    except phonenumbers.phonenumberutil.NumberParseException:
+        flash("Invalid phone number")
+        return redirect('/signup')
+    try:
         user_repository.find_by_email(email)
-        return render_template('signup.html', error="User already exists")
-        #if user exists return back to signup page with error message
+        flash("User already exists")
+        return redirect('/signup')
     except:
+        new_user = User(None, full_name, email, password, phone_number)
         new_user = user_repository.create(new_user)
         session['user_id'] = new_user.id
-        return app.redirect('/')
+        return redirect('/')
+
         #if user doesnt exists, create into database and redirect home
     
 
