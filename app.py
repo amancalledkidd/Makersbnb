@@ -186,7 +186,12 @@ def send_text_confirmation():
     message = client.messages.create(
         to=os.getenv('MY_PHONE_NUMBER'),
         from_=os.getenv('MY_TWILIO_PHONE_NUMBER'),
-        body=(f"Your booking on .. has been confirmed")
+        body=(f"""
+                Hi [Guest's Name],
+                Your booking for [Property Name] is confirmed!
+                \U0001F4C5 Dates: [Check-in Date] to [Check-out Date]
+                \u0024 Total: $[Total Amount]
+            """)
     )
     print(message.sid)
 
