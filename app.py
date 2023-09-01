@@ -183,16 +183,27 @@ def send_text_confirmation():
 
     client = Client(account_sid, auth_token)
 
-    message = client.messages.create(
-        to=os.getenv('MY_PHONE_NUMBER'),
-        from_=os.getenv('MY_TWILIO_PHONE_NUMBER'),
-        body=(f"""
-                Hi [Guest's Name],
-                Your booking for [Property Name] is confirmed!
-                \U0001F4C5 Dates: [Check-in Date] to [Check-out Date]
-                \u0024 Total: $[Total Amount]
-            """)
-    )
+    if confimed = True:
+        message = client.messages.create(
+            to=os.getenv('MY_PHONE_NUMBER'),
+            from_=os.getenv('MY_TWILIO_PHONE_NUMBER'),
+            body=(f"""
+                    Hi [Guest's Name],
+                    Your booking for [Property Name] is confirmed! \n
+                    \U0001F4C5 Dates: [Check-in Date] to [Check-out Date] \n
+                    \u0024 Total: $[Total Amount] \n
+                    Safe travels!
+                """)
+        )
+    else:
+         message = client.messages.create(
+            to=os.getenv('MY_PHONE_NUMBER'),
+            from_=os.getenv('MY_TWILIO_PHONE_NUMBER'),
+            body=(f"""
+                    We regret to inform you that your booking for [Property Name] has been declined for the dates [Check-in Date] to [Check-out Date].
+                    Please explore other available properties or reach out to our support team at [Support Email] or [Support Phone] for assistance.
+                """)
+        )
     print(message.sid)
 
 # These lines start the server if you run this file directly
