@@ -9,6 +9,9 @@ from lib.space_repository import SpaceRepository
 from lib.space import Space
 from lib.booking_repository import BookingRepository
 from lib.booking import Booking
+from twilio.rest import Client
+from dotenv import load_dotenv
+load_dotenv()
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -38,6 +41,7 @@ def confirmation(id):
     booking = booking_repository.find(id)
     spaces = space_repository.all()
     return render_template('confirmation.html',booking=booking, user=user, space=spaces)
+
 
 
 @app.route('/spaces', methods=['GET'])
@@ -173,7 +177,18 @@ def logout():
     session.pop('user_id', None)
     return redirect('/login')
 
+def send_text_confirmation():
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token  = os.getenv('TWILIO_AUTH_TOKEN')
 
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+        to=os.getenv('MY_PHONE_NUMBER'),
+        from_=os.getenv('MY_TWILIO_PHONE_NUMBER'),
+        body=(f"Your booking on .. has been confirmed")
+    )
+    print(message.sid)
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
