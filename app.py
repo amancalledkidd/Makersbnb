@@ -9,6 +9,7 @@ from lib.space_repository import SpaceRepository
 from lib.space import Space
 from lib.booking_repository import BookingRepository
 from lib.booking import Booking
+import phonenumbers
 import re
 
 # Create a new Flask app
@@ -129,6 +130,7 @@ def post_signup():
     lname = request.form['lname']
     full_name = f"{fname} {lname}"
     email = request.form['email'] 
+    phone_number = request.form['phone_number']
     password = request.form['password']
     password2 = request.form['password2']
     password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
@@ -141,9 +143,16 @@ def post_signup():
         flash("Passwords don't match")
         return redirect('/signup')
 
-    phone_number = request.form['phone_number']
     
-    user_repository = UserRepository(connection)
+    #install pip phonenumber
+    try:
+        parsed_number = phonenumbers.parse(phone_number, "GB")
+        if not phonenumbers.is_valid_number(parsed_number):
+            flash("Invalid phone number")
+            return redirect('/signup')
+    except phonenumbers.phonenumberutil.NumberParseException:
+        flash("Invalid phone number")
+        return redirect('/signup')
     try:
         user_repository.find_by_email(email)
         flash("User already exists")
