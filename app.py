@@ -10,6 +10,9 @@ from lib.booking import Booking
 import phonenumbers
 import re
 from flask_mail import Mail, Message
+from twilio.rest import Client
+from dotenv import load_dotenv
+load_dotenv()
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -46,6 +49,7 @@ def confirmation(id):
     booking = booking_repository.find(id)
     spaces = space_repository.all()
     return render_template('confirmation.html',booking=booking, user=user, space=spaces)
+
 
 
 @app.route('/spaces', methods=['GET'])
@@ -117,11 +121,12 @@ def post_list():
     address = f"{addressline}, {city}, {postcode}"
     price = request.form['price']
     description = request.form['description']
+    image_url = request.form['image']
     # start_date = request.form['start_date']
     # end_date = request.form['end_date']
     user_id = request.form['user_id']
     space_repository = SpaceRepository(connection)
-    new_space = Space(None, name, address, price, description, user_id)
+    new_space = Space(None, name, address, price, description, user_id, image_url)
     space_repository.create(new_space)
     
     
@@ -265,6 +270,34 @@ def logout():
     return redirect('/login')
 
 
+# def send_text_confirmation(booking, user):
+#     account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+#     auth_token  = os.getenv('TWILIO_AUTH_TOKEN')
+
+#     client = Client(account_sid, auth_token)
+
+#     if booking.confimed == True:
+#         message = client.messages.create(
+#             to=os.getenv('MY_PHONE_NUMBER'),
+#             from_=os.getenv(user.phone_number),
+#             body=(f"""
+#                     Hi [Guest's Name],
+#                     Your booking for {booking.space_name} is confirmed! \n
+#                     \U0001F4C5 Dates: {booking.start_date} to {booking.end_date} \n
+#                     \u00A3 Total: {booking.total_price} \n
+#                     Safe travels!
+#                 """)
+#         )
+#     else:
+#          message = client.messages.create(
+#             to=os.getenv('MY_PHONE_NUMBER'),
+#             from_=os.getenv(user.phone_number),
+#             body=(f"""
+#                     We regret to inform you that your booking for {booking.space_name} has been declined for the dates {booking.start_date} to {booking.end_date}.
+#                     Please explore other available properties or reach out to our support team at makersbnb@makers.vibes assistance.
+#                 """)
+#         )
+#     print(message.sid)
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
