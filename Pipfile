@@ -12,6 +12,8 @@ pytest-xprocess = "*"
 py = "*"
 phonenumbers = "*"
 flask-mail = "*"
+twilio = "*"
+dotenv-python = "*"
 
 [dev-packages]
 autopep8 = "*"
