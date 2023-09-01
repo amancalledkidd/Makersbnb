@@ -3,6 +3,6 @@ from lib.database_connection import DatabaseConnection
 # ; pipenv run python seed_dev_database.py
 connection = DatabaseConnection(test_mode=False)
 connection.connect()
-connection.seed('seeds/MAKERSBNB_PROJECT.sql')
+connection.seed('seeds/PRODUCTION_SEED.sql')
 # Add your own seed lines below...
 # E.g.connection.seed("seeds/your_seed.sql")
