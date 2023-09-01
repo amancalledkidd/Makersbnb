@@ -1,8 +1,6 @@
 import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
-from lib.space import *
-from lib.space_repository import *
 from lib.user_repository import UserRepository
 from lib.user import User
 from lib.space_repository import SpaceRepository
@@ -78,7 +76,7 @@ def book_new_request(id):
     booking_repo = BookingRepository(connection)
     booking = Booking(None, date, date, space.price, user_id, space_id)
     booking_repo.create(booking)
-    return app.redirect(f'/my_requests')
+    return app.redirect(f'/requests')
 
 
 @app.route('/signup')
@@ -111,13 +109,32 @@ def post_list():
     space_repository.create(new_space)
     return app.redirect('/spaces')
 
-@app.route('/my_requests')
+@app.route('/requests')
 def requests():
     user_id = session.get('user_id')
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-    user = user_repository.find_user_with_bookings(user_id)
-    return render_template('my_requests.html', user=user)
+    user = user_repository.find_with_spaces_and_bookings(user_id)
+    booking_repository = BookingRepository(connection)
+    for space in user.spaces:
+        x = booking_repository.find_by_space_id(space)
+    return render_template('requests.html', user=user)
+
+@app.route('/confirm/<id>', methods=['GET'])
+def confirm(id):
+    connection = get_flask_database_connection(app)
+    booking_repository = BookingRepository(connection)
+    booking = booking_repository.find(id)
+    booking_repository.confirm(booking)
+    return app.redirect('/requests')
+
+@app.route('/reject/<id>', methods=['GET'])
+def reject(id):
+    connection = get_flask_database_connection(app)
+    booking_repository = BookingRepository(connection)
+    booking = booking_repository.find(id)
+    booking_repository.reject(booking)
+    return app.redirect('/requests')
 
 @app.route('/signup', methods=['POST'])
 def post_signup():

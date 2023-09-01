@@ -7,11 +7,14 @@ class BookingRepository:
 
     def all(self):
         rows = self._connection.execute('SELECT * from bookings')
+        space_repository = SpaceRepository(self._connection)
         bookings = []
         for row in rows:
             item = Booking(row["id"], row["start_date"], row["end_date"],
                            row["total_price"], row["user_id"], row["space_id"], row['confirmed'])
+            item.space = space_repository.find(item.space_id)
             bookings.append(item)
+            print(item)
         return bookings
 
     def create(self, booking):
@@ -27,13 +30,27 @@ class BookingRepository:
         rows = self._connection.execute(
             'SELECT * from bookings WHERE id = %s', [booking_id])
         row = rows[0]
-        return Booking(row["id"], row["start_date"], row["end_date"],
+        booking = Booking(row["id"], row["start_date"], row["end_date"],
                        row["total_price"], row["user_id"], row["space_id"], row['confirmed'])
+        space_repository = SpaceRepository(self._connection)
+        booking.space = space_repository.find(booking.space_id)
+        return booking
     
-    # def find_booking_with_space(self, booking):
-    #     rows = self._connection.execute(
-    #         'SELECT * from spaces WHERE id = %s', [booking.space_id])
-    #     row = rows[0]
-    #     booking.space_name = row['name']
-    #     booking.space_address = row['address']
-    #     return booking
+    def find_by_space_id(self, space) -> list[Booking]:
+        rows = self._connection.execute(
+            'SELECT * from bookings WHERE space_id = %s', [space.id])
+        bookings = []
+        for row in rows:
+            booking = Booking(row["id"], row["start_date"], row["end_date"],
+                       row["total_price"], row["user_id"], row["space_id"], row['confirmed'])
+            bookings.append(booking)
+        space.bookings = bookings
+        return space
+    
+    def confirm(self, booking):
+        self._connection.execute('UPDATE bookings SET confirmed = TRUE WHERE id = %s', [booking.id])
+        return None
+    
+    def reject(self, booking):
+        self._connection.execute('DELETE FROM bookings WHERE id = %s', [booking.id])
+        return None
