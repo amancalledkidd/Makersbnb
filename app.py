@@ -51,7 +51,7 @@ def get_spaces():
         user = user_repository.find(user_id)
         return render_template('spaces.html', user=user, spaces=spaces)
     else:
-        return render_template('spaces.html', spaces=spaces)
+        return app.redirect('/')
     
 @app.route('/spaces/<int:id>', methods=['GET'])
 def get_space_by_id(id):
@@ -74,11 +74,11 @@ def book_new_request(id):
     user_id = session.get('user_id')
     space_id = id
     space = space_repository.find(space_id)
-    date = request.get('date')
+    date = request.form.get('date')
     booking_repo = BookingRepository(connection)
     booking = Booking(None, date, date, space.price, user_id, space_id)
     booking_repo.create(booking)
-    return app.redirect(f'/spaces/{space_id}')
+    return app.redirect(f'/my_requests')
 
 
 @app.route('/signup')
@@ -93,18 +93,6 @@ def spaces():
     user = user_repository.find(user_id)
     return render_template('list.html', user=user)
 
-@app.route('/my_requests')
-def requests():
-    user_id = session.get('user_id')
-    connection = get_flask_database_connection(app)
-    user_repository = UserRepository(connection)
-    user = user_repository.find_user_with_bookings(user_id)
-    return render_template('my_requests.html', user=user)
-
-
-
-
-
 @app.route('/spaces/new', methods=['POST'])
 def post_list():
     connection = get_flask_database_connection(app)
@@ -118,22 +106,31 @@ def post_list():
     # start_date = request.form['start_date']
     # end_date = request.form['end_date']
     user_id = request.form['user_id']
-
     space_repository = SpaceRepository(connection)
     new_space = Space(None, name, address, price, description, user_id)
     space_repository.create(new_space)
-
     return app.redirect('/spaces')
 
-
+@app.route('/my_requests')
+def requests():
+    user_id = session.get('user_id')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find_user_with_bookings(user_id)
+    return render_template('my_requests.html', user=user)
 
 @app.route('/signup', methods=['POST'])
 def post_signup():
     connection = get_flask_database_connection(app)
-    full_name = request.form['name'] 
+    fname = request.form['fname']
+    lname = request.form['lname']
+    full_name = f"{fname} {lname}"
     email = request.form['email'] 
     password = request.form['password']
-    phone_number = request.form['phone_number'] 
+    password2 = request.form['password2']
+    if password != password2:
+        return render_template('signup.html', error="Passwords don't match")
+    phone_number = request.form['phone_number']
     
     user_repository = UserRepository(connection)
     new_user = User(None, full_name, email, password, phone_number)
@@ -142,7 +139,8 @@ def post_signup():
         return render_template('signup.html', error="User already exists")
         #if user exists return back to signup page with error message
     except:
-        user_repository.create(new_user)
+        new_user = user_repository.create(new_user)
+        session['user_id'] = new_user.id
         return app.redirect('/')
         #if user doesnt exists, create into database and redirect home
     

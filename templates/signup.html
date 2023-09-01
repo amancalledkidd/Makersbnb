@@ -20,33 +20,42 @@
 </head>
 <body>
     {% include 'navbar.html' %}
-    <form action="/signup" class='form' method="POST">
-        <p>{{error}}</p><h3>Signup</h3>
-        <input placeholder="Enter your name" class="input" type="name" id="name" name='name' type="text">
-        <input placeholder="Enter your email" class="input" id="email" name="email" type="text">
-          <input placeholder="*********" class="input" name="password" id='password'type="password">
-          <input placeholder="Enter your phone number" class="input" name='phone_number'id="phone_number" type="tel">
-          <button>Submit</button>
-    </form>
-</body>
-</html> <div>
-            <!-- <label for="email">Email</label>
-            <input required type="email" name="email" id="email" />
+    <h1 class="title-main">Signup</h1>
+    <form action="/signup" class='form signup' method="POST">
+        {% if error %}
+        <p class="error">{{error}}</p>
+        {% endif %}
+        <div>
+            <label for="email">Email</label>
+            <input required type="email" placeholder="Enter your email" name="email" id="email"
+                value="{{ request.form['email'] }}" />
         </div>
         <div>
             <label for="fname">First Name</label>
-            <input required type="text" name="fname" id="fname" />
+            <input required type="text" placeholder="Enter your first name" name="fname" id="fname"
+                value="{{ request.form['fname'] }}" />
         </div>
         <div>
             <label for="lname">Last Name</label>
-            <input required type="text" name="lname" id="lname" />
+            <input required type="text" placeholder="Enter your first name" name="lname" id="lname"
+                value="{{ request.form['lname'] }}" />
         </div>
         <div>
             <label for="password">Password</label>
-            <input required type="password" name="password" id="password" />
+            <input required type="password" placeholder="*********" name="password" id="password" />
+            </div>
+            <div>
+                <label for="password2">Confirm Password</label>
+                <input required type="password" placeholder="*********" name="password2" id="password2" />
         </div>
         <div>
             <label for="phone_number">Phone Number</label>
-            <input required type="tel" name="phone_number" id="phone_number" />
+            <input required type="tel" placeholder="Enter your phone number" name="phone_number" id="phone_number"
+                value="{{ request.form['phone_number'] }}" />
         </div>
-        <input class='button' type="submit" value='Register'> -->
+        <button type="submit">Submit</button>
+        <p class="text-dark text-center">Have an Account? <a href="/login">Log in here</a></p>
+        </form>
+        </body>
+        
+        </html>

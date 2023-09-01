@@ -16,9 +16,13 @@
             </ul>
 
             <div class="card-body">
-                <form action="/spaces/{{space.id}}" method="POST">
-                    <input type="date" name="date" id="date"/>
-                    <button class="btn btn-primary button-blue">
+                <form class="signup" action="/spaces/{{space.id}}" method="POST">
+                    <div>
+                        <label>Booking Date</label>
+                        <input type="date" name="date" id="date" />
+                    </div>
+                    <button class="btn btn-success">Make Request</button>
+                    <!-- <button class="btn btn-primary button-blue">
                         <span class="span-mother">
                             <span>B</span>
                             <span>o</span>
@@ -32,7 +36,7 @@
                             <span>o</span>
                             <span>k</span>
                         </span>
-                        </button>
+                        </button> -->
                 </form>
             
             </div>

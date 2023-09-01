@@ -2,9 +2,9 @@
 <body>
     {% include 'navbar.html' %}
     <h1 class='text-center title-main'>Listing Spaces</h1>
-    <form action="/spaces/new" method="POST">
+    <form action="/spaces/new" method="POST" class="signup listing">
         <div>
-            <label for="name">Name</label>
+            <label for="name">Property Name</label>
             <input required type="text" name="name" id="name" pattern="[a-zA-Z ]*"/>
         </div>
         <div>
@@ -28,18 +28,18 @@
             <input required type="number" name="price" id="price" />
         </div>
         <div>
-            <label for="start_date">Available from (YY/MM/DD)</label>
+            <label for="start_date">Available from</label>
             <input required type="date" name="start_date" id="start_date" />
         </div>
         <div>
-            <label for="end_date">Available to (YY/MM/DD)</label>
+            <label for="end_date">Available to</label>
             <input required type="date" name="end_date" id="end_date" />
         </div>
         <div class="d-none">
             <label for="user_id">user id</label>
             <input required type="number" name="user_id" id="user_id" value="{{user.id}}" />
         </div>
-        <input class='button' type="submit" value='Register'>
+        <button type="submit">Register</button>
     </form>
 </body>
 </html>

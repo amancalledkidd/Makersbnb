@@ -21,14 +21,16 @@
 </head>
 <body>
     {% include 'navbar.html' %}
-    
-    <form action="/login" class="form" method="POST">
-        <p>{{error}}</p>
-        <div><h3>Login</h3>
-            <input name='email' placeholder="Enter your email" id="email" class="input" type="text">
-            <input name='password' placeholder="*********" class="input" id="password" type="password">
-      
+    <h1 class="title-main">Login</h1>
+    <form action="/login" class="signup" method="POST">
+        <h3 class="text-center">Enter Your Login Details</h3>
+        {% if error %}
+        <p class="error">{{error}}</p>
+        {% endif %}
+        <input name='email' placeholder="Enter your email" id="email" type="text" value="{{ request.form['email'] }}">
+        <input name='password' placeholder="*********" id="password" type="password">
         <button>Submit</button>
+        <p class="text-dark text-center">No Account? <a href="/signup">Signup here</a></p>
     </form>
 </body>
 </html>
