@@ -1,0 +1,32 @@
+{%include 'header.html'%}
+
+<body class="text-dark">
+    {%include 'navbar.html'%}
+    <h1 class="text-center title-main marginrem">Request for <i>{{space.name}}</i></h1>
+    <p></p>
+    <div class="card center marginrem" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">From: {{booking.space_name}}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Start Date: {{booking.start_date}}</h6>
+            <h6 class="card-subtitle mb-2 text-body-secondary">End Date: {{booking.end_date}}</h6>
+            <p class="card-text">{{space.description}}</p>
+            <button>Confirm request from {{user.email}}</button>
+            <button>Deny request from {{user.email}}</button>
+        </div>
+    </div>
+    <div class="card-header text-center title-main marginrem ">
+        <h1>Other Requests</h1>
+    </div>
+    {% for booking in user.bookings %}
+    <a href="/confirmation/{{booking.id}}">
+        <div class="card center border border-primary marginrem" style="width: 18rem;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">From: {{booking.space_name}}</li>
+                <li class="list-group-item">Start Date: {{booking.start_date}}</li>
+                <li class="list-group-item">End Date: {{booking.end_date}}</li>
+            </ul>
+        </div>
+    </a>
+    {% endfor %}
+    </div>
+</body>

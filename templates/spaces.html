@@ -24,19 +24,19 @@
     {% endif %}
   </div>
 
-  <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-5"><br><br>
+  <div class="d-flex justify-content-center p-2 flex-wrap mx-auto border border-light gap-3"><br><br>
     {% for space in spaces %}
-    <div class="card bg-primary text-light  shadow-lg margin-cont" style="width: 18rem;">
+    <div class="card text-center bg-primary text-light shadow-lg margin-cont" style="width: 18rem;">
       <img src="{{space.image_url}}" class="card-img-top" alt="space-img">
       <div class="card-body">
-        <h5 class="shadow"> 
+        <h3 class="shadow">
           {{space.name}}
-        </h5>
-        <h6 class="card-subtitle mb-2 text-price">
-          Price: £{{space.price}}
-        </h6>
+        </h3>
         <p class="card-text">
           Address: {{space.address}}.
+        </p>
+        <p class="card-subtitle mb-2 text-price">
+          £{{space.price}} ppn
         </p>
         <a href="/spaces/{{space.id}}" class="card-link">
           <button class="btn btn-success border border-light button-green">

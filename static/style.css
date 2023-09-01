@@ -3,16 +3,18 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Jost', sans-serif;
-
+    padding-bottom: 30px;
 }
 
 .title-main {
     font-size: 3.2rem;
     text-shadow: 0 2px 0 rgb(37, 132, 255);
+    text-align: center;
+      margin-bottom: 2rem;
 }
 
 .text-price {
-    font-size: 2rem;
+    font-size: 1rem;
     text-shadow: 0 2px 0 rgb(0, 72, 46);
     color: rgb(169, 255, 169);
 }
@@ -31,6 +33,33 @@ body {
     border-radius: 12px;
     text-shadow: 0 0.5px 0 rgb(0, 0, 0);
     text-align: center;
+}
+.error {
+  background-color: red;
+  text-align: center;
+  width: max-content;
+  margin: 0 auto;
+  padding: 0.5rem;
+  border-radius: 9999px;
+}
+
+.signup {
+  max-width: 450px;
+}
+
+.signup>div {
+  display: flex;
+  align-items: center;
+}
+
+.signup>div>label {
+  width: 150px;
+  text-align: right;
+  padding-right: 20px;
+}
+
+.signup>div>input {
+  flex: 1;
 }
 /* buttons */
 .button-green {
@@ -335,3 +364,6 @@ body {
   gap: 3em;
 }
 
+.request {
+  cursor: pointer;
+}
