@@ -1,3 +1,5 @@
+import os
+from twilio.rest import Client
 from lib.booking import Booking
 from lib.space_repository import SpaceRepository
 
@@ -14,7 +16,6 @@ class BookingRepository:
                            row["total_price"], row["user_id"], row["space_id"], row['confirmed'])
             item.space = space_repository.find(item.space_id)
             bookings.append(item)
-            print(item)
         return bookings
 
     def create(self, booking):
@@ -49,6 +50,7 @@ class BookingRepository:
     
     def confirm(self, booking):
         self._connection.execute('UPDATE bookings SET confirmed = TRUE WHERE id = %s', [booking.id])
+        booking.confirmed = True
         return None
     
     def reject(self, booking):

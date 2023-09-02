@@ -46,5 +46,4 @@ def test_find_user_with_bookings_and_spaces(db_connection):
     db_connection.seed("seeds/MAKERSBNB_PROJECT.sql")
     repository = UserRepository(db_connection)
     user = repository.find_with_spaces_and_bookings(1)
-    print(user.bookings[0].space.name)
     assert user.bookings[0].space.name == 'Therese'

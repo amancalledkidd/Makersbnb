@@ -13,7 +13,7 @@ py = "*"
 phonenumbers = "*"
 flask-mail = "*"
 twilio = "*"
-dotenv-python = "*"
+python-dotenv = "*"
 
 [dev-packages]
 autopep8 = "*"
