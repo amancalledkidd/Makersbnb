@@ -68,7 +68,6 @@ class UserRepository:
             'SELECT users.id, users.name as user_name, users.email, users.password, users.phone_number, spaces.id AS space_id, spaces.name AS space_name, spaces.description, spaces.price, spaces.user_id, spaces.image_url FROM users JOIN spaces ON users.id = spaces.user_id WHERE users.id = %s', [user_id])
         spaces = []
         for row in rows:
-            print(row)
             space = Space(row['space_id'], row['space_name'], row['price'], row['description'], row['user_id'], row['image_url'])
             spaces.append(space)
         # row = rows[0]
@@ -84,6 +83,4 @@ class UserRepository:
             booking = booking_repository.find(booking_id)
             bookings.append(booking)
         user.bookings = bookings
-        print(user.bookings)
-        print(user)
         return user

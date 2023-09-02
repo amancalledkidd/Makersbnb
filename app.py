@@ -18,11 +18,11 @@ load_dotenv()
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'makers.bnb@outlook.com'
-app.config['MAIL_PASSWORD'] = 'Makers123'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 mail = Mail(app)
 
 # == Your Routes Here ==
@@ -90,16 +90,17 @@ def book_new_request(id):
     booking_repo = BookingRepository(connection)
     booking = Booking(None, date, date, space.price, user_id, space_id)
     booking_repo.create(booking)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
+    user_email = session.get('user_email')
+    if request.method == 'POST':
+        msg = Message(subject='Your Booking Request is Submitted!', sender='makers.bnb@outlook.com', recipients=[user_email])
+        msg.body = f"""
+We've received your booking request and it's now waiting for the host's confirmation. We'll notify you as soon as we get a response. Thanks for choosing Makers BnB!
 
-#     user_email = session.get('user_email')
-#     if request.method == 'POST':
-#             msg = Message(subject='Your Booking Request is Submitted!', sender='makers.bnb@outlook.com', recipients=[user_email])
-#             msg.body = f"""
-# We've received your booking request and it's now waiting for the host's confirmation. We'll notify you as soon as we get a response. Thanks for choosing Makers BnB!
-
-# Best Regards,
-# MakersBnB Team"""
-#             mail.send(msg)
+Best Regards,
+MakersBnB Team"""
+        mail.send(msg)
     return app.redirect('/requests')
 
 
@@ -146,7 +147,6 @@ MakersBnB Team"""
 @app.route('/requests')
 def requests():
     user_id = session.get('user_id')
-    print(user_id)
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_with_spaces_and_bookings(user_id)
@@ -220,6 +220,7 @@ def post_signup():
         new_user = User(None, full_name, email, password, phone_number)
         new_user = user_repository.create(new_user)
         session['user_id'] = new_user.id
+        session['user_email'] = new_user.email
         if request.method == 'POST':
             msg = Message(subject='Welcome to MakersBnB!', sender='makers.bnb@outlook.com', recipients=[email])
             msg.body = f"""Dear {full_name},

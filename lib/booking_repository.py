@@ -16,7 +16,6 @@ class BookingRepository:
                            row["total_price"], row["user_id"], row["space_id"], row['confirmed'])
             item.space = space_repository.find(item.space_id)
             bookings.append(item)
-            print(item)
         return bookings
 
     def create(self, booking):
