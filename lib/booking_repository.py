@@ -1,3 +1,5 @@
+import os
+from twilio.rest import Client
 from lib.booking import Booking
 from lib.space_repository import SpaceRepository
 
@@ -49,6 +51,7 @@ class BookingRepository:
     
     def confirm(self, booking):
         self._connection.execute('UPDATE bookings SET confirmed = TRUE WHERE id = %s', [booking.id])
+        booking.confirmed = True
         return None
     
     def reject(self, booking):

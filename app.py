@@ -10,7 +10,7 @@ from lib.booking import Booking
 import phonenumbers
 import re
 from flask_mail import Mail, Message
-from twilio.rest import Client
+from lib.confirmation import send_text_confirmation
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -22,13 +22,13 @@ app.config['MAIL_USERNAME'] = 'makers.bnb@outlook.com'
 app.config['MAIL_PASSWORD'] = 'Makers123'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+app.config['SECRET_KEY'] = 'your_secret_key'
 mail = Mail(app)
 
 # == Your Routes Here ==
 
 # GET /
 # Returns the homepage
-app.config['SECRET_KEY'] = 'your_secret_key'
 
 @app.route('/', methods=['GET'])
 def get_index():
@@ -91,16 +91,16 @@ def book_new_request(id):
     booking = Booking(None, date, date, space.price, user_id, space_id)
     booking_repo.create(booking)
 
-    user_email = session.get('user_email')
-    if request.method == 'POST':
-            msg = Message(subject='Your Booking Request is Submitted!', sender='makers.bnb@outlook.com', recipients=[user_email])
-            msg.body = f"""
-We've received your booking request and it's now waiting for the host's confirmation. We'll notify you as soon as we get a response. Thanks for choosing Makers BnB!
+#     user_email = session.get('user_email')
+#     if request.method == 'POST':
+#             msg = Message(subject='Your Booking Request is Submitted!', sender='makers.bnb@outlook.com', recipients=[user_email])
+#             msg.body = f"""
+# We've received your booking request and it's now waiting for the host's confirmation. We'll notify you as soon as we get a response. Thanks for choosing Makers BnB!
 
-Best Regards,
-MakersBnB Team"""
-            mail.send(msg)
-    return app.redirect(f'/requests')
+# Best Regards,
+# MakersBnB Team"""
+#             mail.send(msg)
+    return app.redirect('/requests')
 
 
 @app.route('/spaces/new')
@@ -146,6 +146,7 @@ MakersBnB Team"""
 @app.route('/requests')
 def requests():
     user_id = session.get('user_id')
+    print(user_id)
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_with_spaces_and_bookings(user_id)
@@ -156,18 +157,26 @@ def requests():
 
 @app.route('/confirm/<id>', methods=['GET'])
 def confirm(id):
+    user_id = session.get('user_id')
     connection = get_flask_database_connection(app)
     booking_repository = BookingRepository(connection)
     booking = booking_repository.find(id)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
     booking_repository.confirm(booking)
+    send_text_confirmation(booking, user)
     return app.redirect('/requests')
 
 @app.route('/reject/<id>', methods=['GET'])
 def reject(id):
+    user_id = session.get('user_id')
     connection = get_flask_database_connection(app)
     booking_repository = BookingRepository(connection)
     booking = booking_repository.find(id)
+    user_repository = UserRepository(connection)
+    user = user_repository.find(user_id)
     booking_repository.reject(booking)
+    send_text_confirmation(booking, user)
     return app.redirect('/requests')
 
 
@@ -182,22 +191,19 @@ def post_signup():
     fname = request.form['fname']
     lname = request.form['lname']
     full_name = f"{fname} {lname}"
-    email = request.form['email'] 
+    email = request.form['email']
     phone_number = request.form['phone_number']
     password = request.form['password']
     password2 = request.form['password2']
-    password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
-    password_regex = re.compile(password_pattern)
-
-    if not re.fullmatch(password_regex, password):
-        flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
-        return redirect('/signup')
     if password != password2:
         flash("Passwords don't match")
         return redirect('/signup')
+    password_pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$"
+    password_regex = re.compile(password_pattern)
+    if not re.fullmatch(password_regex, password):
+        flash("Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+        return redirect('/signup')
 
-    
-    #install pip phonenumber
     try:
         parsed_number = phonenumbers.parse(phone_number, "GB")
         if not phonenumbers.is_valid_number(parsed_number):
@@ -268,36 +274,6 @@ def logout():
     session.pop('user_id', None)
     session.pop('user_email', None)
     return redirect('/login')
-
-
-# def send_text_confirmation(booking, user):
-#     account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-#     auth_token  = os.getenv('TWILIO_AUTH_TOKEN')
-
-#     client = Client(account_sid, auth_token)
-
-#     if booking.confimed == True:
-#         message = client.messages.create(
-#             to=os.getenv('MY_PHONE_NUMBER'),
-#             from_=os.getenv(user.phone_number),
-#             body=(f"""
-#                     Hi [Guest's Name],
-#                     Your booking for {booking.space_name} is confirmed! \n
-#                     \U0001F4C5 Dates: {booking.start_date} to {booking.end_date} \n
-#                     \u00A3 Total: {booking.total_price} \n
-#                     Safe travels!
-#                 """)
-#         )
-#     else:
-#          message = client.messages.create(
-#             to=os.getenv('MY_PHONE_NUMBER'),
-#             from_=os.getenv(user.phone_number),
-#             body=(f"""
-#                     We regret to inform you that your booking for {booking.space_name} has been declined for the dates {booking.start_date} to {booking.end_date}.
-#                     Please explore other available properties or reach out to our support team at makersbnb@makers.vibes assistance.
-#                 """)
-#         )
-#     print(message.sid)
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database

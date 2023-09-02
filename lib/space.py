@@ -19,7 +19,3 @@ class Space:
 
     def __repr__(self):
         return f'Space({self.id}, {self.name}, {self.address}, {self.price}, {self.description}, {self.user_id})'
-    
-    # def get_bookings(self):
-    #     booking_repo = BookingRepository(self._connection)
-    #     bookings = booking_repo.find_by_space_id(self)
