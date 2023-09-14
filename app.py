@@ -258,8 +258,12 @@ def post_login():
     user_repository = UserRepository(connection)
     try:
         user = user_repository.find_by_email(email)
+        print(user.password)
+        print(password)
         if user.password == password:
+            print(1)
             session['user_id'] = user.id
+            print(2)
             session['user_email'] = user.email
             return app.redirect('/spaces')
         #if password matches log them in
